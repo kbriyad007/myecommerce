@@ -48,20 +48,31 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
   const params = await props.params;
   const slug = params.slug;
 
+  console.log("[DEBUG] Requested slug:", slug);
+
   try {
+    // 1. Fetch current product
     const response = await Storyblok.get(`cdn/stories/products/${slug}`, {
       version: "draft",
     });
+    console.log("[DEBUG] Storyblok product response:", response);
 
     const story = response.data.story;
-    if (!story?.content) return notFound();
+    if (!story?.content) {
+      console.error("[ERROR] Story content not found for slug:", slug);
+      return notFound();
+    }
 
     const product: MyProduct = story.content;
     const currentUUID = story.uuid;
     const currentCategory = product.Category;
     const imageUrl = getImageUrl(product.image);
 
-    // ✅ Fetch similar products from "Products/" path
+    console.log("[DEBUG] Current product UUID:", currentUUID);
+    console.log("[DEBUG] Current product category:", currentCategory);
+    console.log("[DEBUG] Current product imageUrl:", imageUrl);
+
+    // 2. Fetch similar products (same category)
     let similarProducts: StoryblokProduct[] = [];
     if (currentCategory) {
       const all = await Storyblok.get("cdn/stories", {
@@ -71,11 +82,23 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
         is_startpage: false,
       });
 
+      console.log("[DEBUG] All products fetched:", all.data.stories.length);
+
       similarProducts = (all.data.stories as StoryblokProduct[]).filter((item) => {
         const cat = item.content?.Category?.trim().toLowerCase();
         const currentCat = currentCategory?.trim().toLowerCase();
-        return cat === currentCat && item.uuid !== currentUUID;
+        const isSameCategory = cat === currentCat;
+        const isDifferentProduct = item.uuid !== currentUUID;
+        const result = isSameCategory && isDifferentProduct;
+
+        console.log(`[DEBUG] Checking product ${item.uuid} - Category: ${cat}, SameCategory: ${isSameCategory}, DifferentProduct: ${isDifferentProduct}, Include: ${result}`);
+
+        return result;
       });
+
+      console.log("[DEBUG] Similar products found:", similarProducts.length);
+    } else {
+      console.warn("[WARN] Current product has no category defined.");
     }
 
     return (
@@ -123,7 +146,7 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
       </main>
     );
   } catch (error) {
-    console.error("Error loading product page:", error);
+    console.error("[ERROR] Loading product page failed:", error);
     return notFound();
   }
 }
