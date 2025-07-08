@@ -20,7 +20,7 @@ interface MyProduct {
   description: string;
   Price?: number | string;
   image?: { filename: string } | string;
-  Category?: string;
+  Category?: string | object | null;
   relatedproducts?: RelatedRef[];
 }
 
@@ -31,7 +31,7 @@ interface StoryblokProduct {
     name?: string;
     Price?: number | string;
     image?: string | { filename?: string };
-    Category?: string | any; // be flexible here
+    Category?: string | object | null;
   };
 }
 
@@ -44,61 +44,49 @@ function getImageUrl(image: MyProduct["image"]): string | null {
   return null;
 }
 
+// Page component
 export default async function Page(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
   const slug = params.slug;
 
-  console.log("[DEBUG] Requested slug:", slug);
-
   try {
-    const response = await Storyblok.get(`cdn/stories/Products/${slug}`, {
+    // Fetch the current product by slug
+    const response = await Storyblok.get(`cdn/stories/products/${slug}`, {
       version: "draft",
     });
 
     const story = response.data.story;
-    if (!story?.content) {
-      console.error("[ERROR] Story content missing for slug:", slug);
-      return notFound();
-    }
+    if (!story?.content) return notFound();
 
     const product: MyProduct = story.content;
     const currentUUID = story.uuid;
     const currentCategory = product.Category;
     const imageUrl = getImageUrl(product.image);
 
-    console.log("[DEBUG] Current product UUID:", currentUUID);
-    console.log("[DEBUG] Current product category:", currentCategory);
-    console.log("[DEBUG] Current product imageUrl:", imageUrl);
-
+    // Fetch similar products by category, safely checking Category field type
     let similarProducts: StoryblokProduct[] = [];
     if (currentCategory && typeof currentCategory === "string") {
       const all = await Storyblok.get("cdn/stories", {
-        starts_with: "Products/",
+        starts_with: "products/",
         version: "draft",
         per_page: 100,
         is_startpage: false,
       });
 
-      console.log("[DEBUG] All products fetched:", all.data.stories.length);
-
       similarProducts = (all.data.stories as StoryblokProduct[]).filter((item) => {
-        const cat = typeof item.content?.Category === "string"
-          ? item.content.Category.trim().toLowerCase()
-          : "";
+        const cat =
+          typeof item.content?.Category === "string"
+            ? item.content.Category.trim().toLowerCase()
+            : "";
         const currentCat = currentCategory.trim().toLowerCase();
-        const include = cat === currentCat && item.uuid !== currentUUID;
-        console.log(`[DEBUG] Check product uuid=${item.uuid} cat=${cat} include=${include}`);
-        return include;
+        return cat === currentCat && item.uuid !== currentUUID;
       });
-
-      console.log("[DEBUG] Similar products count:", similarProducts.length);
-    } else {
-      console.warn("[WARN] Current product has no string category.");
     }
 
     return (
       <main className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-10 xl:px-20">
         <div className="max-w-screen-xl mx-auto grid lg:grid-cols-2 gap-12 items-start">
+          {/* Product Image */}
           <div className="bg-white rounded-2xl overflow-hidden shadow-md ring-1 ring-gray-200">
             <div className="aspect-[4/3] relative">
               {imageUrl ? (
@@ -118,6 +106,7 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
             </div>
           </div>
 
+          {/* Product Info */}
           <section className="flex flex-col justify-between h-full space-y-5">
             <ProductDetailsClient
               name={product.name}
@@ -127,17 +116,19 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
           </section>
         </div>
 
+        {/* Cart */}
         <div className="mt-12 max-w-screen-xl mx-auto">
           <CartWrapper />
         </div>
 
+        {/* Similar Products */}
         <div className="mt-16 max-w-screen-xl mx-auto">
           <SimilarProducts products={similarProducts} />
         </div>
       </main>
     );
   } catch (error) {
-    console.error("[ERROR] Product page loading error:", error);
+    console.error("Error loading product page:", error);
     return notFound();
   }
 }
