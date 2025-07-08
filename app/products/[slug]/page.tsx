@@ -37,9 +37,9 @@ interface StoryblokProduct {
 
 function getImageUrl(image: MyProduct["image"]): string | null {
   if (typeof image === "string") {
-    return image.startsWith("//") ? https:${image} : image;
+    return image.startsWith("//") ? `https:${image}` : image;
   } else if (image?.filename) {
-    return https:${image.filename};
+    return `https:${image.filename}`;
   }
   return null;
 }
@@ -50,7 +50,7 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
 
   try {
     // 1. Fetch current product
-    const response = await Storyblok.get(cdn/stories/products/${slug}, {
+    const response = await Storyblok.get(`cdn/stories/products/${slug}`, {
       version: "draft",
     });
 
@@ -64,7 +64,7 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
 
     const imageUrl = getImageUrl(product.image);
 
-    // 2. Fetch similar products (same category)
+    // 2. Fetch similar products (same category, case-insensitive, trimmed)
     let similarProducts: StoryblokProduct[] = [];
     if (currentCategory) {
       const all = await Storyblok.get("cdn/stories", {
@@ -74,10 +74,11 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
         is_startpage: false,
       });
 
-      similarProducts = (all.data.stories as StoryblokProduct[]).filter(
-        (item) =>
-          item.content?.Category === currentCategory && item.uuid !== currentUUID
-      );
+      similarProducts = (all.data.stories as StoryblokProduct[]).filter((item) => {
+        const cat = item.content?.Category?.trim().toLowerCase();
+        const currentCat = currentCategory?.trim().toLowerCase();
+        return cat === currentCat && item.uuid !== currentUUID;
+      });
     }
 
     return (
