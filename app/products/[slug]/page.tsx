@@ -44,8 +44,9 @@ function getImageUrl(image: MyProduct["image"]): string | null {
   return null;
 }
 
-// ✅ FINAL FORMAT — DON'T use Promise<{ slug: string }>
-export default async function Page({ params }: { params: { slug: string } }) {
+// ✅ This version works for your project (await params)
+export default async function Page(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const slug = params.slug;
 
   try {
@@ -61,7 +62,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
     const currentCategory = product.Category;
     const imageUrl = getImageUrl(product.image);
 
-    // Fetch similar products based on category (case-insensitive)
+    // ✅ Fetch similar products
     let similarProducts: StoryblokProduct[] = [];
     if (currentCategory) {
       const all = await Storyblok.get("cdn/stories", {
