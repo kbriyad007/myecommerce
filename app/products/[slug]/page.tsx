@@ -64,7 +64,7 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
 
     const imageUrl = getImageUrl(product.image);
 
-    // 2. Fetch similar products (same category, case-insensitive, trimmed)
+    // 2. Fetch similar products (same category)
     let similarProducts: StoryblokProduct[] = [];
     if (currentCategory) {
       const all = await Storyblok.get("cdn/stories", {
@@ -74,11 +74,10 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
         is_startpage: false,
       });
 
-      similarProducts = (all.data.stories as StoryblokProduct[]).filter((item) => {
-        const cat = item.content?.Category?.trim().toLowerCase();
-        const currentCat = currentCategory?.trim().toLowerCase();
-        return cat === currentCat && item.uuid !== currentUUID;
-      });
+      similarProducts = (all.data.stories as StoryblokProduct[]).filter(
+        (item) =>
+          item.content?.Category === currentCategory && item.uuid !== currentUUID
+      );
     }
 
     return (
