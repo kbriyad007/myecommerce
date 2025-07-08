@@ -49,7 +49,7 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
   const slug = params.slug;
 
   try {
-    const response = await Storyblok.get(`cdn/stories/Products/${slug}`, {
+    const response = await Storyblok.get(`cdn/stories/products/${slug}`, {
       version: "draft",
     });
 
@@ -65,7 +65,7 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
     let similarProducts: StoryblokProduct[] = [];
     if (currentCategory) {
       const all = await Storyblok.get("cdn/stories", {
-        starts_with: "Products/",
+        starts_with: "products/",
         version: "draft",
         per_page: 100,
         is_startpage: false,
