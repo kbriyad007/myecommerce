@@ -128,4 +128,4 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
     console.error("Error loading product page:", error);
     return notFound();
   }
-} 
+}
