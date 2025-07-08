@@ -1,9 +1,6 @@
 import StoryblokClient from "storyblok-js-client";
-import Image from "next/image";
 import { notFound } from "next/navigation";
-import ProductDetailsClient from "./ProductDetailsClient";
-import CartWrapper from "./CartWrapper";
-import SimilarProducts from "@/components/SimilarProducts";
+import ProductPageLayout from "./ProductPageLayout";
 
 const Storyblok = new StoryblokClient({
   accessToken: process.env.NEXT_PUBLIC_STORYBLOK_TOKEN!,
@@ -44,13 +41,11 @@ function getImageUrl(image: MyProduct["image"]): string | null {
   return null;
 }
 
-// Page component
 export default async function Page(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
   const slug = params.slug;
 
   try {
-    // Fetch the current product by slug
     const response = await Storyblok.get(`cdn/stories/products/${slug}`, {
       version: "draft",
     });
@@ -63,7 +58,6 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
     const currentCategory = product.Category;
     const imageUrl = getImageUrl(product.image);
 
-    // Fetch similar products by category, safely checking Category field type
     let similarProducts: StoryblokProduct[] = [];
     if (currentCategory && typeof currentCategory === "string") {
       const all = await Storyblok.get("cdn/stories", {
@@ -84,48 +78,11 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
     }
 
     return (
-      <main className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-10 xl:px-20">
-        <div className="max-w-screen-xl mx-auto grid lg:grid-cols-2 gap-12 items-start">
-          {/* Product Image */}
-          <div className="bg-white rounded-2xl overflow-hidden shadow-md ring-1 ring-gray-200">
-            <div className="aspect-[4/3] relative">
-              {imageUrl ? (
-                <Image
-                  src={imageUrl}
-                  alt={product.name || "Product"}
-                  fill
-                  className="object-cover hover:scale-105 transition-transform duration-300"
-                  unoptimized
-                  priority
-                />
-              ) : (
-                <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-base font-semibold">
-                  No image available
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Product Info */}
-          <section className="flex flex-col justify-between h-full space-y-5">
-            <ProductDetailsClient
-              name={product.name}
-              description={product.description}
-              price={product.Price}
-            />
-          </section>
-        </div>
-
-        {/* Cart */}
-        <div className="mt-12 max-w-screen-xl mx-auto">
-          <CartWrapper />
-        </div>
-
-        {/* Similar Products */}
-        <div className="mt-16 max-w-screen-xl mx-auto">
-          <SimilarProducts products={similarProducts} />
-        </div>
-      </main>
+      <ProductPageLayout
+        product={product}
+        imageUrl={imageUrl}
+        similarProducts={similarProducts}
+      />
     );
   } catch (error) {
     console.error("Error loading product page:", error);
