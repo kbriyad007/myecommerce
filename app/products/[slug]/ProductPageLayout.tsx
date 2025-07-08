@@ -31,22 +31,22 @@ interface Props {
 
 export default function ProductPageLayout({ product, imageUrl, similarProducts }: Props) {
   return (
-    <main className="min-h-screen bg-gray-50 py-8 px-4 sm:px-8 lg:px-16 xl:px-24">
-      <div className="max-w-screen-lg mx-auto grid lg:grid-cols-2 gap-8 items-start">
+    <main className="min-h-screen bg-gradient-to-tr from-gray-100 via-white to-gray-50 py-12 px-6 sm:px-12 lg:px-24 xl:px-32">
+      <div className="max-w-screen-lg mx-auto grid lg:grid-cols-2 gap-12 items-start">
         {/* Product Image */}
-        <div className="bg-white rounded-xl overflow-hidden shadow-md ring-1 ring-gray-200">
+        <div className="bg-white rounded-3xl overflow-hidden shadow-2xl ring-1 ring-gray-300 hover:shadow-3xl transition-shadow duration-500 ease-in-out">
           <div className="aspect-[4/3] relative">
             {imageUrl ? (
               <Image
                 src={imageUrl}
                 alt={product.name || "Product"}
                 fill
-                className="object-cover transition-transform duration-300 hover:scale-105"
+                className="object-cover transform transition-transform duration-500 hover:scale-110"
                 unoptimized
                 priority
               />
             ) : (
-              <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm font-semibold">
+              <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-lg font-semibold">
                 No image available
               </div>
             )}
@@ -54,7 +54,7 @@ export default function ProductPageLayout({ product, imageUrl, similarProducts }
         </div>
 
         {/* Product Info */}
-        <section className="flex flex-col justify-between h-full space-y-4">
+        <section className="flex flex-col justify-between h-full space-y-6">
           <ProductDetailsClient
             name={product.name}
             description={product.description}
@@ -64,12 +64,12 @@ export default function ProductPageLayout({ product, imageUrl, similarProducts }
       </div>
 
       {/* Cart */}
-      <div className="mt-10 max-w-screen-lg mx-auto">
+      <div className="mt-16 max-w-screen-lg mx-auto">
         <CartWrapper />
       </div>
 
       {/* Similar Products */}
-      <div className="mt-14 max-w-screen-lg mx-auto">
+      <div className="mt-20 max-w-screen-lg mx-auto">
         <SimilarProducts products={similarProducts} />
       </div>
     </main>
