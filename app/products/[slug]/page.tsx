@@ -3,7 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import ProductDetailsClient from "./ProductDetailsClient";
 import CartWrapper from "./CartWrapper";
-import SimilarProducts from "@/components/SimilarProducts"; // ✅ Import
+import SimilarProducts from "@/components/SimilarProducts";
 
 const Storyblok = new StoryblokClient({
   accessToken: process.env.NEXT_PUBLIC_STORYBLOK_TOKEN!,
@@ -22,6 +22,17 @@ interface MyProduct {
   image?: { filename: string } | string;
   Category?: string;
   relatedproducts?: RelatedRef[];
+}
+
+interface StoryblokProduct {
+  uuid: string;
+  full_slug: string;
+  content: {
+    name?: string;
+    Price?: number | string;
+    image?: string | { filename?: string };
+    Category?: string;
+  };
 }
 
 function getImageUrl(image: MyProduct["image"]): string | null {
@@ -54,7 +65,7 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
     const imageUrl = getImageUrl(product.image);
 
     // 2. Fetch similar products (same category)
-    let similarProducts: any[] = [];
+    let similarProducts: StoryblokProduct[] = [];
     if (currentCategory) {
       const all = await Storyblok.get("cdn/stories", {
         starts_with: "products/",
@@ -63,8 +74,8 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
         is_startpage: false,
       });
 
-      similarProducts = all.data.stories.filter(
-        (item: any) =>
+      similarProducts = (all.data.stories as StoryblokProduct[]).filter(
+        (item) =>
           item.content?.Category === currentCategory && item.uuid !== currentUUID
       );
     }
