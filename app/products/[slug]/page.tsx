@@ -35,6 +35,13 @@ interface StoryblokProduct {
   };
 }
 
+// ✅ Define proper PageProps type
+type PageProps = {
+  params: {
+    slug: string;
+  };
+};
+
 function getImageUrl(image: MyProduct["image"]): string | null {
   if (typeof image === "string") {
     return image.startsWith("//") ? `https:${image}` : image;
@@ -44,8 +51,7 @@ function getImageUrl(image: MyProduct["image"]): string | null {
   return null;
 }
 
-// ✅ FIX: Don't treat params as a Promise
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Page({ params }: PageProps) {
   const slug = params.slug;
 
   try {
@@ -55,6 +61,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
     });
 
     const story = response.data.story;
+
     if (!story?.content) return notFound();
 
     const product: MyProduct = story.content;
@@ -63,8 +70,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
     const imageUrl = getImageUrl(product.image);
 
-    // 2. Fetch similar products (same category, trimmed and lowercase)
+    // 2. Fetch similar products based on category
     let similarProducts: StoryblokProduct[] = [];
+
     if (currentCategory) {
       const all = await Storyblok.get("cdn/stories", {
         starts_with: "products/",
