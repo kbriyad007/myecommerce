@@ -37,9 +37,9 @@ interface StoryblokProduct {
 
 function getImageUrl(image: MyProduct["image"]): string | null {
   if (typeof image === "string") {
-    return image.startsWith("//") ? `https:${image}` : image;
+    return image.startsWith("//") ? https:${image} : image;
   } else if (image?.filename) {
-    return `https:${image.filename}`;
+    return https:${image.filename};
   }
   return null;
 }
@@ -49,6 +49,7 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
   const slug = params.slug;
 
   try {
+    // 1. Fetch current product
     const response = await Storyblok.get(cdn/stories/products/${slug}, {
       version: "draft",
     });
@@ -63,7 +64,7 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
 
     const imageUrl = getImageUrl(product.image);
 
-    // 2. Fetch similar products (case-insensitive match)
+    // 2. Fetch similar products (same category)
     let similarProducts: StoryblokProduct[] = [];
     if (currentCategory) {
       const all = await Storyblok.get("cdn/stories", {
@@ -73,25 +74,24 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
         is_startpage: false,
       });
 
-      similarProducts = (all.data.stories as StoryblokProduct[]).filter((item) => {
-        const cat = item.content?.Category?.trim().toLowerCase();
-        const currentCat = currentCategory?.trim().toLowerCase();
-        return cat === currentCat && item.uuid !== currentUUID;
-      });
+      similarProducts = (all.data.stories as StoryblokProduct[]).filter(
+        (item) =>
+          item.content?.Category === currentCategory && item.uuid !== currentUUID
+      );
     }
 
     return (
-      <main className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-10 xl:px-20">
-        <div className="max-w-screen-xl mx-auto grid lg:grid-cols-2 gap-12 items-start">
+      <main className="min-h-screen bg-gradient-to-tr from-white to-gray-100 py-14 px-6 sm:px-10 lg:px-24 xl:px-32">
+        <div className="max-w-[1600px] mx-auto grid lg:grid-cols-2 gap-16 items-start">
           {/* Product Image */}
-          <div className="bg-white rounded-2xl overflow-hidden shadow-md ring-1 ring-gray-200">
+          <div className="bg-white rounded-3xl overflow-hidden shadow-xl ring-1 ring-gray-200">
             <div className="aspect-[4/3] relative">
               {imageUrl ? (
                 <Image
                   src={imageUrl}
                   alt={product.name || "Product"}
                   fill
-                  className="object-cover hover:scale-105 transition-transform duration-300"
+                  className="object-cover transition-transform duration-300 hover:scale-105"
                   unoptimized
                   priority
                 />
@@ -104,7 +104,7 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
           </div>
 
           {/* Product Info */}
-          <section className="flex flex-col justify-between h-full space-y-5">
+          <section className="flex flex-col justify-between h-full space-y-6">
             <ProductDetailsClient
               name={product.name}
               description={product.description}
@@ -114,12 +114,12 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
         </div>
 
         {/* Cart */}
-        <div className="mt-12 max-w-screen-xl mx-auto">
+        <div className="mt-10">
           <CartWrapper />
         </div>
 
-        {/* Similar Products */}
-        <div className="mt-16 max-w-screen-xl mx-auto">
+        {/* ✅ Similar Products */}
+        <div className="mt-16 max-w-[1600px] mx-auto">
           <SimilarProducts products={similarProducts} />
         </div>
       </main>
@@ -128,4 +128,4 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
     console.error("Error loading product page:", error);
     return notFound();
   }
-}
+} 
