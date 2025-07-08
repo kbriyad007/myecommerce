@@ -44,13 +44,12 @@ function getImageUrl(image: MyProduct["image"]): string | null {
   return null;
 }
 
-// ✅ This version works for your project (await params)
 export default async function Page(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
   const slug = params.slug;
 
   try {
-    const response = await Storyblok.get(`cdn/stories/products/${slug}`, {
+    const response = await Storyblok.get(`cdn/stories/Products/${slug}`, {
       version: "draft",
     });
 
@@ -62,11 +61,11 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
     const currentCategory = product.Category;
     const imageUrl = getImageUrl(product.image);
 
-    // ✅ Fetch similar products
+    // ✅ Fetch similar products from "Products/" path
     let similarProducts: StoryblokProduct[] = [];
     if (currentCategory) {
       const all = await Storyblok.get("cdn/stories", {
-        starts_with: "products/",
+        starts_with: "Products/",
         version: "draft",
         per_page: 100,
         is_startpage: false,
