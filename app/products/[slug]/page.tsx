@@ -49,8 +49,7 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
   const slug = params.slug;
 
   try {
-    // 1. Fetch current product
-    const response = await Storyblok.get(`cdn/stories/products/${slug}`, {
+    const response = await Storyblok.get(cdn/stories/products/${slug}, {
       version: "draft",
     });
 
