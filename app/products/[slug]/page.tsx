@@ -3,6 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import ProductDetailsClient from "./ProductDetailsClient";
 import CartWrapper from "./CartWrapper";
+import SimilarProducts from "@/components/SimilarProducts"; // ✅ Import
 
 const Storyblok = new StoryblokClient({
   accessToken: process.env.NEXT_PUBLIC_STORYBLOK_TOKEN!,
@@ -19,14 +20,15 @@ interface MyProduct {
   description: string;
   Price?: number | string;
   image?: { filename: string } | string;
-  relatedproducts?: RelatedRef[]; // should match Storyblok field exactly
+  Category?: string;
+  relatedproducts?: RelatedRef[];
 }
 
 function getImageUrl(image: MyProduct["image"]): string | null {
   if (typeof image === "string") {
     return image.startsWith("//") ? `https:${image}` : image;
   } else if (image?.filename) {
-    return `https://a.storyblok.com${image.filename}`;
+    return `https:${image.filename}`;
   }
   return null;
 }
@@ -36,31 +38,36 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
   const slug = params.slug;
 
   try {
+    // 1. Fetch current product
     const response = await Storyblok.get(`cdn/stories/products/${slug}`, {
       version: "draft",
     });
 
-    if (!response?.data?.story?.content) {
-      console.error("Product content not found");
-      return notFound();
-    }
+    const story = response.data.story;
 
-    const product: MyProduct = response.data.story.content;
+    if (!story?.content) return notFound();
 
-    // Debug logs for related products field
-    console.log("Product slug:", slug);
-    console.log("Related products field (raw):", product.relatedproducts);
-
-    // Defensive check if relatedproducts exists and is array
-    if (!product.relatedproducts || !Array.isArray(product.relatedproducts)) {
-      console.warn("Related products field is missing or not an array");
-    } else if (product.relatedproducts.length === 0) {
-      console.info("Related products array is empty");
-    } else {
-      console.log("Related products count:", product.relatedproducts.length);
-    }
+    const product: MyProduct = story.content;
+    const currentUUID = story.uuid;
+    const currentCategory = product.Category;
 
     const imageUrl = getImageUrl(product.image);
+
+    // 2. Fetch similar products (same category)
+    let similarProducts: any[] = [];
+    if (currentCategory) {
+      const all = await Storyblok.get("cdn/stories", {
+        starts_with: "products/",
+        version: "draft",
+        per_page: 100,
+        is_startpage: false,
+      });
+
+      similarProducts = all.data.stories.filter(
+        (item: any) =>
+          item.content?.Category === currentCategory && item.uuid !== currentUUID
+      );
+    }
 
     return (
       <main className="min-h-screen bg-gradient-to-tr from-white to-gray-100 py-14 px-6 sm:px-10 lg:px-24 xl:px-32">
@@ -98,6 +105,11 @@ export default async function Page(props: { params: Promise<{ slug: string }> })
         {/* Cart */}
         <div className="mt-10">
           <CartWrapper />
+        </div>
+
+        {/* ✅ Similar Products */}
+        <div className="mt-16 max-w-[1600px] mx-auto">
+          <SimilarProducts products={similarProducts} />
         </div>
       </main>
     );
