@@ -3,6 +3,7 @@
 import { useCart } from "@/context/CartContext";
 import { X, ShoppingCart } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link"; // ✅ import Link from Next.js
 
 export default function CartMenu() {
   const { cart, removeFromCart, addToCart } = useCart();
@@ -44,7 +45,7 @@ export default function CartMenu() {
     addToCart({ name, price: existingItem.price, quantity: diff });
   };
 
-  // Calculate total price safely by coercing price to number
+  // Total price
   const totalPrice = cart.reduce(
     (total, item) => total + Number(item.price || 0) * item.quantity,
     0
@@ -113,40 +114,4 @@ export default function CartMenu() {
 
                   <button
                     onClick={() => removeFromCart(item.name)}
-                    className="text-red-500 hover:text-red-600 text-xs font-semibold"
-                    aria-label={`Remove ${item.name} from cart`}
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-
-        {/* Fixed footer with total and checkout button */}
-        <div className="border-t p-4 bg-white sticky bottom-0 left-0 w-full z-50 flex flex-col gap-2">
-          <div className="flex justify-between items-center font-semibold text-lg">
-            <span>Total:</span>
-            <span>${totalPrice.toFixed(2)}</span>
-          </div>
-          <button
-            onClick={() => alert("Proceed to checkout")}
-            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
-          >
-            Checkout
-          </button>
-        </div>
-      </div>
-
-      {/* Optional: Add backdrop overlay */}
-      {isOpen && (
-        <div
-          onClick={() => setIsOpen(false)}
-          className="fixed inset-0 bg-black bg-opacity-30 z-30"
-          aria-hidden="true"
-        />
-      )}
-    </>
-  );
-}
+                    className="text-red-500 hover:text-red-600
