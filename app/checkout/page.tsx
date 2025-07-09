@@ -55,7 +55,7 @@ export default function CheckoutPage() {
     window.print();
   };
 
-  if (cart.length === 0) {
+  if (cart.length === 0 && !orderConfirmed) {
     return (
       <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 via-white to-gray-100 p-6">
         <div className="text-center bg-white shadow-md rounded-lg p-10 max-w-lg w-full">
@@ -67,20 +67,23 @@ export default function CheckoutPage() {
   }
 
   if (orderConfirmed) {
-    // Order Confirmation Summary Page
     return (
-      <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 p-6 flex justify-center items-center">
-        <div className="max-w-xl w-full bg-white rounded-lg shadow-lg p-8 text-gray-800 print:p-0 print:shadow-none print:rounded-none print:bg-white">
-          <h1 className="text-4xl font-extrabold text-green-600 mb-6">Thank you for your order!</h1>
-          <p className="mb-6 text-lg">We have received your order and will process it shortly.</p>
+      <main className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-gray-100 px-4 py-10 flex items-center justify-center print:bg-white print:p-0">
+        <div className="max-w-xl w-full bg-white rounded-lg shadow-md p-8 text-gray-800 print:shadow-none print:rounded-none print:p-4">
+          <h1 className="text-3xl font-bold text-green-600 mb-4">✅ Thank you for your order!</h1>
+          <p className="text-gray-600 mb-6">Your order has been received and is being processed.</p>
 
-          <section className="mb-6">
-            <h2 className="text-2xl font-semibold mb-3 border-b pb-2">Order Summary</h2>
-            <ul className="divide-y divide-gray-200 max-h-64 overflow-y-auto">
+          <div className="mb-6">
+            <h2 className="text-xl font-semibold mb-3 border-b pb-2">🧾 Order Summary</h2>
+            <ul className="divide-y divide-gray-200 max-h-64 overflow-y-auto print:overflow-visible">
               {cart.map((item) => (
                 <li key={item.name} className="flex justify-between py-3">
-                  <span className="font-medium">{item.name} x{item.quantity}</span>
-                  <span className="font-semibold">${(Number(item.price) * item.quantity).toFixed(2)}</span>
+                  <span className="font-medium">
+                    {item.name} × {item.quantity}
+                  </span>
+                  <span className="font-semibold">
+                    ${(Number(item.price) * item.quantity).toFixed(2)}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -88,16 +91,16 @@ export default function CheckoutPage() {
               <span>Total:</span>
               <span>${totalPrice.toFixed(2)}</span>
             </div>
-          </section>
+          </div>
 
-          <section>
-            <h2 className="text-2xl font-semibold mb-3 border-b pb-2">Shipping Information</h2>
+          <div>
+            <h2 className="text-xl font-semibold mb-3 border-b pb-2">📦 Shipping Info</h2>
             <p><strong>Name:</strong> {form.name}</p>
             <p><strong>Address:</strong> {form.address}</p>
             <p><strong>Phone:</strong> {form.phone}</p>
-          </section>
+          </div>
 
-          <div className="mt-8 flex flex-col gap-3">
+          <div className="mt-8 flex flex-col gap-3 print:hidden">
             <button
               onClick={handlePrint}
               className="w-full bg-gray-700 hover:bg-gray-800 text-white py-3 rounded-md font-semibold transition"
@@ -108,7 +111,7 @@ export default function CheckoutPage() {
               onClick={() => setOrderConfirmed(false)}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md font-semibold transition"
             >
-              Place Another Order
+              📦 Place Another Order
             </button>
           </div>
         </div>
@@ -116,14 +119,12 @@ export default function CheckoutPage() {
     );
   }
 
-  // Default checkout form view
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 p-4 sm:p-6 flex justify-center">
       <div className="max-w-[1100px] w-full grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6">
         {/* Order Summary */}
         <div className="bg-white rounded-lg shadow-md p-6 overflow-x-auto">
-          <h1 className="text-3xl font-bold text-gray-800 mb-8">Your Order</h1>
-
+          <h1 className="text-3xl font-bold text-gray-800 mb-8">🛒 Your Order</h1>
           <table className="min-w-full text-sm text-gray-800">
             <thead className="bg-gray-100 uppercase tracking-wider border-b text-xs">
               <tr>
@@ -152,19 +153,18 @@ export default function CheckoutPage() {
               })}
             </tbody>
           </table>
-
           <div className="mt-8 flex justify-end text-lg font-semibold text-gray-700">
             Total:
             <span className="text-blue-600 ml-2">${totalPrice.toFixed(2)}</span>
           </div>
         </div>
 
-        {/* Shipping Info Form */}
+        {/* Shipping Form */}
         <div className="bg-white rounded-lg shadow-md p-6 h-fit sticky top-6">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Shipping Info</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">🚚 Shipping Info</h2>
 
           <div className="space-y-5 text-sm">
-            {[ 
+            {[
               { name: "name", label: "Name", icon: <FaUser /> },
               { name: "address", label: "Address", icon: <FaMapMarkerAlt /> },
               { name: "phone", label: "Phone", icon: <FaPhoneAlt /> },
