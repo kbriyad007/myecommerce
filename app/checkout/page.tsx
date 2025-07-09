@@ -57,7 +57,7 @@ export default function CheckoutPage() {
   if (cart.length === 0) {
     return (
       <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 via-white to-gray-100 p-6">
-        <div className="text-center bg-white shadow-md rounded-lg p-10">
+        <div className="text-center bg-white shadow-md rounded-lg p-10 max-w-lg w-full">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Your cart is empty</h2>
           <p className="text-gray-500">Add items to begin checkout.</p>
         </div>
@@ -66,10 +66,10 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 p-4 sm:p-6">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 p-4 sm:p-6 flex justify-center">
+      <div className="max-w-[1100px] w-full grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6">
         {/* Order Summary */}
-        <div className="lg:col-span-2 bg-white rounded-lg shadow-md p-6 overflow-x-auto">
+        <div className="bg-white rounded-lg shadow-md p-6 overflow-x-auto">
           <h1 className="text-3xl font-bold text-gray-800 mb-8">Your Order</h1>
 
           <table className="min-w-full text-sm text-gray-800">
@@ -158,4 +158,3 @@ export default function CheckoutPage() {
     </main>
   );
 }
-
