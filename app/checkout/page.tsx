@@ -7,8 +7,18 @@ import { FaUser, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
 export default function CheckoutPage() {
   const { cart } = useCart();
 
-  const [form, setForm] = useState({ name: "", address: "", phone: "" });
-  const [errors, setErrors] = useState({ name: "", address: "", phone: "" });
+  const [form, setForm] = useState({
+    name: "",
+    address: "",
+    phone: "",
+  });
+
+  const [errors, setErrors] = useState({
+    name: "",
+    address: "",
+    phone: "",
+  });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const totalPrice = cart.reduce(
@@ -36,7 +46,7 @@ export default function CheckoutPage() {
     setIsSubmitting(true);
     setTimeout(() => {
       alert(
-        `\u2705 Order Confirmed!\n\nName: ${form.name}\nAddress: ${form.address}\nPhone: ${form.phone}\nTotal: $${totalPrice.toFixed(
+        `✅ Order Confirmed!\n\nName: ${form.name}\nAddress: ${form.address}\nPhone: ${form.phone}\nTotal: $${totalPrice.toFixed(
           2
         )}`
       );
@@ -115,19 +125,19 @@ export default function CheckoutPage() {
                 </label>
                 <input
                   name={field.name}
-                  value={(form as any)[field.name]}
+                  value={form[field.name as keyof typeof form]}
                   onChange={handleChange}
                   type="text"
                   className={`w-full border ${
-                    (errors as any)[field.name]
+                    errors[field.name as keyof typeof errors]
                       ? "border-red-500"
                       : "border-gray-300"
                   } rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
                   placeholder={`Enter your ${field.label.toLowerCase()}`}
                 />
-                {(errors as any)[field.name] && (
+                {errors[field.name as keyof typeof errors] && (
                   <p className="text-red-500 text-xs mt-1">
-                    {(errors as any)[field.name]}
+                    {errors[field.name as keyof typeof errors]}
                   </p>
                 )}
               </div>
