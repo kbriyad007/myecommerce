@@ -20,6 +20,7 @@ export default function CheckoutPage() {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [orderConfirmed, setOrderConfirmed] = useState(false);
 
   const totalPrice = cart.reduce(
     (total, item) => total + Number(item.price || 0) * item.quantity,
@@ -45,12 +46,8 @@ export default function CheckoutPage() {
 
     setIsSubmitting(true);
     setTimeout(() => {
-      alert(
-        `✅ Order Confirmed!\n\nName: ${form.name}\nAddress: ${form.address}\nPhone: ${form.phone}\nTotal: $${totalPrice.toFixed(
-          2
-        )}`
-      );
       setIsSubmitting(false);
+      setOrderConfirmed(true);
     }, 1500);
   };
 
@@ -65,6 +62,49 @@ export default function CheckoutPage() {
     );
   }
 
+  if (orderConfirmed) {
+    // Order Confirmation Summary Page
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 p-6 flex justify-center items-center">
+        <div className="max-w-xl w-full bg-white rounded-lg shadow-lg p-8 text-gray-800">
+          <h1 className="text-4xl font-extrabold text-green-600 mb-6">Thank you for your order!</h1>
+          <p className="mb-6 text-lg">We have received your order and will process it shortly.</p>
+
+          <section className="mb-6">
+            <h2 className="text-2xl font-semibold mb-3 border-b pb-2">Order Summary</h2>
+            <ul className="divide-y divide-gray-200 max-h-64 overflow-y-auto">
+              {cart.map((item) => (
+                <li key={item.name} className="flex justify-between py-3">
+                  <span className="font-medium">{item.name} x{item.quantity}</span>
+                  <span className="font-semibold">${(Number(item.price) * item.quantity).toFixed(2)}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="flex justify-between font-bold text-lg pt-4 border-t mt-4">
+              <span>Total:</span>
+              <span>${totalPrice.toFixed(2)}</span>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold mb-3 border-b pb-2">Shipping Information</h2>
+            <p><strong>Name:</strong> {form.name}</p>
+            <p><strong>Address:</strong> {form.address}</p>
+            <p><strong>Phone:</strong> {form.phone}</p>
+          </section>
+
+          <button
+            onClick={() => setOrderConfirmed(false)}
+            className="mt-8 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md font-semibold transition"
+          >
+            Place Another Order
+          </button>
+        </div>
+      </main>
+    );
+  }
+
+  // Default checkout form view
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 p-4 sm:p-6 flex justify-center">
       <div className="max-w-[1100px] w-full grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6">
