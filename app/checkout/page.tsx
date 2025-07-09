@@ -57,7 +57,7 @@ export default function CheckoutPage() {
   if (cart.length === 0) {
     return (
       <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 via-white to-gray-100 p-6">
-        <div className="text-center bg-white shadow-xl rounded-2xl p-10">
+        <div className="text-center bg-white shadow-md rounded-lg p-10">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Your cart is empty</h2>
           <p className="text-gray-500">Add items to begin checkout.</p>
         </div>
@@ -69,7 +69,7 @@ export default function CheckoutPage() {
     <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 p-4 sm:p-6">
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Order Summary */}
-        <div className="lg:col-span-2 bg-white rounded-3xl shadow-2xl p-6 overflow-x-auto">
+        <div className="lg:col-span-2 bg-white rounded-lg shadow-md p-6 overflow-x-auto">
           <h1 className="text-3xl font-bold text-gray-800 mb-8">Your Order</h1>
 
           <table className="min-w-full text-sm text-gray-800">
@@ -108,11 +108,11 @@ export default function CheckoutPage() {
         </div>
 
         {/* Shipping Info Form */}
-        <div className="bg-white rounded-3xl shadow-2xl p-6 h-fit sticky top-6">
+        <div className="bg-white rounded-lg shadow-md p-6 h-fit sticky top-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Shipping Info</h2>
 
           <div className="space-y-5 text-sm">
-            {[
+            {[ 
               { name: "name", label: "Name", icon: <FaUser /> },
               { name: "address", label: "Address", icon: <FaMapMarkerAlt /> },
               { name: "phone", label: "Phone", icon: <FaPhoneAlt /> },
@@ -132,7 +132,7 @@ export default function CheckoutPage() {
                     errors[field.name as keyof typeof errors]
                       ? "border-red-500"
                       : "border-gray-300"
-                  } rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
+                  } rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all`}
                   placeholder={`Enter your ${field.label.toLowerCase()}`}
                 />
                 {errors[field.name as keyof typeof errors] && (
@@ -147,7 +147,7 @@ export default function CheckoutPage() {
           <button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className={`mt-8 w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:to-blue-600 text-white text-sm font-semibold py-3 rounded-xl shadow-md transition-all duration-200 ${
+            className={`mt-8 w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:to-blue-600 text-white text-sm font-semibold py-3 rounded-md shadow transition-all duration-200 ${
               isSubmitting ? "opacity-60 cursor-not-allowed" : "hover:shadow-lg"
             }`}
           >
@@ -158,3 +158,4 @@ export default function CheckoutPage() {
     </main>
   );
 }
+
