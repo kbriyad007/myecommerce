@@ -8,40 +8,56 @@ import {
   ReactNode,
 } from "react";
 
-// Cart item shape
+// ✅ Cart item shape
 export interface CartItem {
   name: string;
-  price?: number | string;
+  price: number;
   quantity: number;
+  image?: string;
 }
 
-// Cart context shape
+// ✅ Cart context shape
 interface CartContextType {
   cart: CartItem[];
-  addToCart: (item: CartItem) => void;
+  addToCart: (item: Omit<CartItem, "price"> & { price: number | string }) => void;
   removeFromCart: (name: string) => void;
   clearCart: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-// Provider
+// ✅ Provider
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
 
   // Load from localStorage
   useEffect(() => {
-    const stored = localStorage.getItem("cart");
-    if (stored) setCart(JSON.parse(stored));
+    try {
+      const stored = localStorage.getItem("cart");
+      if (stored) {
+        setCart(JSON.parse(stored));
+      }
+    } catch (error) {
+      console.error("Failed to load cart from localStorage", error);
+      setCart([]);
+    }
   }, []);
 
   // Save to localStorage
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
+    try {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    } catch (error) {
+      console.error("Failed to save cart to localStorage", error);
+    }
   }, [cart]);
 
-  // Add or update item
-  const addToCart = (item: CartItem) => {
+  // ✅ Add or update item
+  const addToCart = (item: Omit<CartItem, "price"> & { price: number | string }) => {
+    const normalizedPrice = typeof item.price === "string"
+      ? parseFloat(item.price)
+      : item.price;
+
     setCart((prev) => {
       const existing = prev.find((p) => p.name === item.name);
       if (existing) {
@@ -51,16 +67,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             : p
         );
       }
-      return [...prev, item];
+      return [...prev, { ...item, price: normalizedPrice }];
     });
   };
 
-  // Remove item
+  // ✅ Remove item
   const removeFromCart = (name: string) => {
     setCart((prev) => prev.filter((item) => item.name !== name));
   };
 
-  // Clear all items
+  // ✅ Clear all items
   const clearCart = () => {
     setCart([]);
   };
@@ -72,10 +88,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Hook
+// ✅ Hook
 export const useCart = () => {
   const context = useContext(CartContext);
   if (!context) throw new Error("useCart must be used within a CartProvider");
   return context;
 };
-
