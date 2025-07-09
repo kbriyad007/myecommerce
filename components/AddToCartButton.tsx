@@ -1,10 +1,10 @@
 // components/AddToCartButton.tsx
 "use client";
 
-import { useCart } from "@/context/CartContext"; // or your hook path
-import { Button } from "@/components/ui/button"; // shadcn button (optional)
+import { useCart } from "@/context/CartContext"; // update path if needed
+import { Button } from "@/components/ui/button"; // or replace with <button>
 
-interface AddToCartButtonProps {
+interface Props {
   product: {
     name: string;
     Price?: number | string;
@@ -12,13 +12,19 @@ interface AddToCartButtonProps {
   };
 }
 
-export default function AddToCartButton({ product }: AddToCartButtonProps) {
+export default function AddToCartButton({ product }: Props) {
   const { addToCart } = useCart();
 
   return (
     <Button
-      onClick={() => addToCart({ ...product, quantity: 1 })}
-      variant="default"
+      onClick={() =>
+        addToCart({
+          name: product.name,
+          price: product.Price || 0,
+          image: product.image,
+          quantity: 1,
+        })
+      }
       className="mt-2"
     >
       Add to Cart
