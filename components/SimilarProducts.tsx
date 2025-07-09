@@ -1,8 +1,8 @@
-
 "use client";
 
 import Image from "next/image";
 import Link from "next/link";
+import AddToCartButton from "./AddToCartButton";
 
 interface ProductContent {
   name?: string;
@@ -33,21 +33,41 @@ export default function SimilarProducts({ products }: Props) {
           const { content } = p;
           const img =
             typeof content.image === "string"
-              ? content.image
-              : content.image?.filename || "";
+              ? content.image.startsWith("//")
+                ? `https:${content.image}`
+                : content.image
+              : content.image?.filename
+              ? `https:${content.image.filename}`
+              : "";
+
+          const name = content.name || "Unnamed Product";
+          const price = content.Price || "—";
 
           return (
-            <Link key={p.uuid} href={`/${p.full_slug}`} className="block border rounded-lg p-4 hover:shadow transition">
-              <Image
-                src={`https:${img}`}
-                alt={content.name || "Product"}
-                width={300}
-                height={200}
-                className="object-cover w-full h-40 mb-2 rounded"
+            <div key={p.uuid} className="border rounded-lg p-4 hover:shadow transition bg-white">
+              <Link href={`/${p.full_slug}`} className="block">
+                {img && (
+                  <Image
+                    src={img}
+                    alt={name}
+                    width={300}
+                    height={200}
+                    className="object-cover w-full h-40 mb-2 rounded"
+                  />
+                )}
+                <div className="font-medium truncate">{name}</div>
+                <div className="text-gray-600 text-sm mb-2">৳ {price}</div>
+              </Link>
+
+              {/* Add to Cart Button */}
+              <AddToCartButton
+                product={{
+                  name,
+                  Price: price,
+                  image: img,
+                }}
               />
-              <div className="font-medium truncate">{content.name}</div>
-              <div className="text-gray-600 text-sm">${content.Price}</div>
-            </Link>
+            </div>
           );
         })}
       </div>
