@@ -1,6 +1,6 @@
 "use client";
 
-import { useCart } from "@/context/CartContext"; // update path if needed
+import { useCart } from "@/context/CartContext"; // ✅ adjust path if needed
 
 interface Props {
   product: {
@@ -17,13 +17,13 @@ export default function AddToCartButton({ product }: Props) {
     const price =
       typeof product.Price === "string"
         ? parseFloat(product.Price)
-        : product.Price || 0;
+        : product.Price ?? 0;
 
     addToCart({
       name: product.name,
       price,
-      image: product.image || "",
       quantity: 1,
+      image: product.image ?? "", // ✅ assuming CartItem type allows this
     });
   };
 
