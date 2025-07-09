@@ -31,7 +31,8 @@ export default function SimilarProducts({ products }: Props) {
       <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
         {products.map((p) => {
           const { content } = p;
-          const img =
+
+          const imageUrl =
             typeof content.image === "string"
               ? content.image.startsWith("//")
                 ? `https:${content.image}`
@@ -46,9 +47,9 @@ export default function SimilarProducts({ products }: Props) {
           return (
             <div key={p.uuid} className="border rounded-lg p-4 hover:shadow transition bg-white">
               <Link href={`/${p.full_slug}`} className="block">
-                {img && (
+                {imageUrl && (
                   <Image
-                    src={img}
+                    src={imageUrl}
                     alt={name}
                     width={300}
                     height={200}
@@ -59,12 +60,11 @@ export default function SimilarProducts({ products }: Props) {
                 <div className="text-gray-600 text-sm mb-2">৳ {price}</div>
               </Link>
 
-              {/* Add to Cart Button */}
               <AddToCartButton
                 product={{
                   name,
                   Price: price,
-                  image: img,
+                  image: imageUrl,
                 }}
               />
             </div>
