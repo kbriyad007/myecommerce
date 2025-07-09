@@ -51,6 +51,10 @@ export default function CheckoutPage() {
     }, 1500);
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   if (cart.length === 0) {
     return (
       <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 via-white to-gray-100 p-6">
@@ -66,7 +70,7 @@ export default function CheckoutPage() {
     // Order Confirmation Summary Page
     return (
       <main className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 p-6 flex justify-center items-center">
-        <div className="max-w-xl w-full bg-white rounded-lg shadow-lg p-8 text-gray-800">
+        <div className="max-w-xl w-full bg-white rounded-lg shadow-lg p-8 text-gray-800 print:p-0 print:shadow-none print:rounded-none print:bg-white">
           <h1 className="text-4xl font-extrabold text-green-600 mb-6">Thank you for your order!</h1>
           <p className="mb-6 text-lg">We have received your order and will process it shortly.</p>
 
@@ -93,12 +97,20 @@ export default function CheckoutPage() {
             <p><strong>Phone:</strong> {form.phone}</p>
           </section>
 
-          <button
-            onClick={() => setOrderConfirmed(false)}
-            className="mt-8 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md font-semibold transition"
-          >
-            Place Another Order
-          </button>
+          <div className="mt-8 flex flex-col gap-3">
+            <button
+              onClick={handlePrint}
+              className="w-full bg-gray-700 hover:bg-gray-800 text-white py-3 rounded-md font-semibold transition"
+            >
+              🖨️ Print Order Summary
+            </button>
+            <button
+              onClick={() => setOrderConfirmed(false)}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md font-semibold transition"
+            >
+              Place Another Order
+            </button>
+          </div>
         </div>
       </main>
     );
