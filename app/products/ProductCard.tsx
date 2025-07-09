@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { MyProduct } from "@/types";
-import { useCart } from "@/app/context/CartContext";
+import { useCart } from "@/context/CartContext";
 
 interface Props {
   product: MyProduct;
