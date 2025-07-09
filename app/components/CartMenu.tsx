@@ -3,7 +3,7 @@
 import { useCart } from "@/context/CartContext";
 import { X, ShoppingCart } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
-import Link from "next/link"; // ✅ import Link from Next.js
+import Link from "next/link"; // ✅ Import Next.js Link
 
 export default function CartMenu() {
   const { cart, removeFromCart, addToCart } = useCart();
@@ -45,7 +45,7 @@ export default function CartMenu() {
     addToCart({ name, price: existingItem.price, quantity: diff });
   };
 
-  // Total price
+  // Calculate total price
   const totalPrice = cart.reduce(
     (total, item) => total + Number(item.price || 0) * item.quantity,
     0
@@ -97,7 +97,9 @@ export default function CartMenu() {
               >
                 <div className="flex flex-col">
                   <p className="font-medium text-gray-900">{item.name}</p>
-                  <p className="text-green-600 font-semibold">${item.price}</p>
+                  <p className="text-green-600 font-semibold">
+                    ${item.price}
+                  </p>
                 </div>
 
                 <div className="flex items-center space-x-2">
@@ -114,4 +116,40 @@ export default function CartMenu() {
 
                   <button
                     onClick={() => removeFromCart(item.name)}
-                    className="text-red-500 hover:text-red-600
+                    className="text-red-500 hover:text-red-600 text-xs font-semibold"
+                    aria-label={`Remove ${item.name} from cart`}
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Footer with total and checkout link */}
+        <div className="border-t p-4 bg-white sticky bottom-0 left-0 w-full z-50 flex flex-col gap-2">
+          <div className="flex justify-between items-center font-semibold text-lg">
+            <span>Total:</span>
+            <span>${totalPrice.toFixed(2)}</span>
+          </div>
+          <Link
+            href="https://myecommerce-cbu4.vercel.app/checkout"
+            className="w-full block text-center bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+          >
+            Checkout
+          </Link>
+        </div>
+      </div>
+
+      {/* Optional: Backdrop overlay */}
+      {isOpen && (
+        <div
+          onClick={() => setIsOpen(false)}
+          className="fixed inset-0 bg-black bg-opacity-30 z-30"
+          aria-hidden="true"
+        />
+      )}
+    </>
+  );
+}
