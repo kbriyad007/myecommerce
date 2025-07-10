@@ -5,5 +5,9 @@ const nextConfig = {
     domains: ['a.storyblok.com'], // ✅ allow Storyblok images
   },
 };
-
+module.exports = {
+  images: {
+    domains: ["images.unsplash.com"],
+  },
+};
 export default nextConfig;
