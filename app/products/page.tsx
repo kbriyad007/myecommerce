@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import CartMenu from "@/app/components/CartMenu";
-import HeroSection from "@/components/HeroSection";
+import HeroSection from "@/components/HeroSection"; // ✅ uses props now
 
 interface MyProduct {
   component: string;
@@ -68,7 +68,7 @@ export default function Page() {
           _version: story._version,
         }));
         setProducts(productList);
-        setFilteredProducts(productList); // Initialize filtered list
+        setFilteredProducts(productList);
       })
       .catch((err) => setErrorMsg(err.message))
       .finally(() => setLoading(false));
@@ -127,24 +127,16 @@ export default function Page() {
 
   return (
     <main className="bg-white min-h-screen">
-      {/* ✅ Hero section */}
-      <HeroSection />
+      {/* ✅ Pass search props to HeroSection */}
+      <HeroSection
+        searchValue={searchTerm}
+        onSearchChange={setSearchTerm}
+      />
 
       <div className="px-4 py-12">
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
           Our Products
         </h1>
-
-        {/* 🔍 Search Input */}
-        <div className="flex justify-center mb-10">
-          <input
-            type="text"
-            placeholder="🔍 Search products..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full sm:w-96 px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow"
-          />
-        </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredProducts.map((product, i) => {
@@ -152,8 +144,8 @@ export default function Page() {
             const imageUrl = getImageUrl(product.image, product._version);
 
             return (
-              <Link key={slug} href={`/products/${slug}`} passHref legacyBehavior>
-                <a className="bg-white border border-gray-200 rounded-xl overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-all">
+              <Link key={slug} href={`/products/${slug}`}>
+                <div className="bg-white border border-gray-200 rounded-xl overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-all cursor-pointer">
                   <div className="relative w-full pt-[61.8%] bg-gray-100">
                     {imageUrl ? (
                       <Image
@@ -199,13 +191,12 @@ export default function Page() {
                       </button>
                     </div>
                   </div>
-                </a>
+                </div>
               </Link>
             );
           })}
         </div>
 
-        {/* 🛒 Cart menu */}
         <div className="mt-10">
           <CartMenu />
         </div>
