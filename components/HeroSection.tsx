@@ -4,35 +4,39 @@ import Link from "next/link";
 
 export default function HeroSection() {
   return (
-    <section className="relative w-full min-h-[80vh] bg-gradient-to-br from-indigo-700 via-purple-700 to-pink-600 text-white px-6 py-28 flex items-center justify-center overflow-hidden">
-      {/* Background animation blobs */}
-      <div className="absolute top-0 left-0 w-80 h-80 bg-pink-400 opacity-20 rounded-full blur-[120px] -z-10 animate-pulse" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-indigo-500 opacity-20 rounded-full blur-[140px] -z-10 animate-pulse" />
+    <section className="relative w-full min-h-[90vh] bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#334155] text-white px-6 py-32 flex items-center justify-center overflow-hidden">
+      {/* Animated glow blobs */}
+      <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] bg-purple-500 rounded-full opacity-30 blur-[120px] animate-pulse -z-10" />
+      <div className="absolute bottom-[-120px] right-[-120px] w-[400px] h-[400px] bg-pink-500 rounded-full opacity-20 blur-[160px] animate-pulse -z-10" />
 
-      {/* Main content */}
-      <div className="max-w-5xl mx-auto text-center md:text-left">
-        <div className="backdrop-blur-lg bg-white/5 border border-white/10 rounded-2xl p-10 md:p-16 shadow-xl">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight text-white drop-shadow-lg">
-            Raining Offers For <br />
-            <span className="text-yellow-300">Hot Summer!</span>
+      <div className="w-full max-w-5xl mx-auto text-center md:text-left">
+        <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-3xl p-10 md:p-16 shadow-2xl transition-all duration-300 hover:shadow-[0_0_40px_#7c3aed50]">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight text-white mb-4">
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-300 via-pink-300 to-yellow-300">
+              Raining Offers For
+            </span>
+            <span className="block mt-1">Hot Summer!</span>
           </h1>
 
-          <p className="mt-6 text-lg sm:text-xl text-white/90 font-medium">
-            Get <span className="font-semibold text-white">25% Off</span> on all products today only. Don&apos;t miss out!
+          <p className="mt-6 text-lg sm:text-xl text-gray-300 max-w-2xl font-medium">
+            Enjoy <span className="text-white font-bold">25% OFF</span> on all products this season — exclusive limited time deals.
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
             <Link
               href="/products"
-              className="px-8 py-3 bg-white text-indigo-700 font-semibold rounded-full shadow-md hover:bg-gray-100 transition"
+              className="group relative inline-flex items-center justify-center px-8 py-3 font-semibold text-indigo-900 bg-white rounded-full transition-all duration-300 hover:shadow-lg hover:scale-105"
             >
-              SHOP NOW
+              <span className="z-10">🛒 Shop Now</span>
+              <span className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition duration-300 bg-indigo-100" />
             </Link>
+
             <Link
               href="#"
-              className="px-8 py-3 border border-white text-white font-semibold rounded-full hover:bg-white hover:text-black transition"
+              className="group relative inline-flex items-center justify-center px-8 py-3 border border-white/30 text-white rounded-full hover:bg-white hover:text-black transition-all duration-300"
             >
-              FIND MORE
+              <span className="z-10">🔎 Discover More</span>
+              <span className="absolute inset-0 rounded-full bg-white opacity-0 group-hover:opacity-10 transition duration-300" />
             </Link>
           </div>
         </div>
