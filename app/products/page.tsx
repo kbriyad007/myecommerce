@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import CartMenu from "@/app/components/CartMenu";
-import HeroSection from "@/components/HeroSection"; // ✅ Hero Section imported
+import HeroSection from "@/components/HeroSection";
 
 interface MyProduct {
   component: string;
@@ -36,6 +36,8 @@ function slugify(text: string): string {
 
 export default function Page() {
   const [products, setProducts] = useState<MyProduct[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<MyProduct[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
   const [addedToCartIndex, setAddedToCartIndex] = useState<number | null>(null);
@@ -66,10 +68,21 @@ export default function Page() {
           _version: story._version,
         }));
         setProducts(productList);
+        setFilteredProducts(productList); // Initialize filtered list
       })
       .catch((err) => setErrorMsg(err.message))
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    const term = searchTerm.toLowerCase();
+    const filtered = products.filter(
+      (p) =>
+        p.name?.toLowerCase().includes(term) ||
+        p.description?.toLowerCase().includes(term)
+    );
+    setFilteredProducts(filtered);
+  }, [searchTerm, products]);
 
   const handleAddToCart = (product: MyProduct, index: number) => {
     const price =
@@ -114,16 +127,27 @@ export default function Page() {
 
   return (
     <main className="bg-white min-h-screen">
-      {/* ✅ Hero section at the top */}
+      {/* ✅ Hero section */}
       <HeroSection />
 
       <div className="px-4 py-12">
-        <h1 className="text-3xl font-bold text-center text-gray-800 mb-10">
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
           Our Products
         </h1>
 
+        {/* 🔍 Search Input */}
+        <div className="flex justify-center mb-10">
+          <input
+            type="text"
+            placeholder="🔍 Search products..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full sm:w-96 px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow"
+          />
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {products.map((product, i) => {
+          {filteredProducts.map((product, i) => {
             const slug = product.slug || slugify(product.name || `product-${i}`);
             const imageUrl = getImageUrl(product.image, product._version);
 
@@ -181,7 +205,7 @@ export default function Page() {
           })}
         </div>
 
-        {/* ✅ Cart menu below */}
+        {/* 🛒 Cart menu */}
         <div className="mt-10">
           <CartMenu />
         </div>
