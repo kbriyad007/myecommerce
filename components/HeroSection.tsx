@@ -2,48 +2,42 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
 
 export default function HeroSection() {
   return (
-    <section className="relative w-full bg-gradient-to-br from-gray-50 to-white overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 py-24 lg:flex lg:items-center lg:justify-between">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
+    <section className="w-full bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 text-white py-32 px-6">
+      <div className="max-w-5xl mx-auto text-center">
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="max-w-2xl"
+          transition={{ duration: 0.6 }}
+          className="text-5xl sm:text-6xl font-extrabold tracking-tight leading-tight"
         >
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900">
-            Discover Premium Products
-          </h1>
-          <p className="mt-6 text-lg text-gray-600">
-            Explore our exclusive selection of high-quality items tailored to your needs. Shop the latest arrivals now.
-          </p>
-          <div className="mt-8 flex">
-            <Link
-              href="/products"
-              className="inline-block rounded-full bg-black px-8 py-3 text-white text-sm font-medium transition hover:bg-gray-800"
-            >
-              Browse Products
-            </Link>
-          </div>
-        </motion.div>
+          Welcome to <span className="text-white drop-shadow-lg">ShopVerse</span>
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+          className="mt-6 text-lg sm:text-xl text-white/90 max-w-2xl mx-auto"
+        >
+          Your ultimate destination for curated quality products. Discover, shop, and elevate your lifestyle.
+        </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1 }}
-          className="mt-12 lg:mt-0 lg:ml-12"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.5, duration: 0.5 }}
+          className="mt-10"
         >
-          <Image
-            src="/hero-product.jpg" // Add your hero image here (store it in /public)
-            alt="Product display"
-            width={600}
-            height={400}
-            className="rounded-3xl shadow-xl object-cover"
-          />
+          <Link
+            href="/products"
+            className="inline-block bg-white text-indigo-700 font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-gray-100 transition"
+          >
+            Explore Products
+          </Link>
         </motion.div>
       </div>
     </section>
