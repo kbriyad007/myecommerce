@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useCart } from "@/context/CartContext"; // ✅ Confirm this path is correct
-import CartMenu from "@/app/components/CartMenu"; // ✅ Adjust if needed
+import { useCart } from "@/context/CartContext";
+import CartMenu from "@/app/components/CartMenu";
+import HeroSection from "@/components/HeroSection"; // ✅ Hero Section imported
 
 interface MyProduct {
   component: string;
@@ -12,7 +13,7 @@ interface MyProduct {
   description: string;
   image?: { filename: string } | string;
   price?: number | string;
-  Price?: number | string; // From Storyblok
+  Price?: number | string;
   slug?: string;
   _version?: number;
 }
@@ -112,73 +113,78 @@ export default function Page() {
   }
 
   return (
-    <main className="px-4 py-12 bg-white min-h-screen">
-      <h1 className="text-3xl font-bold text-center text-gray-800 mb-10">
-        Our Products
-      </h1>
+    <main className="bg-white min-h-screen">
+      {/* ✅ Hero section at the top */}
+      <HeroSection />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {products.map((product, i) => {
-          const slug = product.slug || slugify(product.name || `product-${i}`);
-          const imageUrl = getImageUrl(product.image, product._version);
+      <div className="px-4 py-12">
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-10">
+          Our Products
+        </h1>
 
-          return (
-            <Link key={slug} href={`/products/${slug}`} passHref legacyBehavior>
-              <a className="bg-white border border-gray-200 rounded-xl overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-all">
-                <div className="relative w-full pt-[61.8%] bg-gray-100">
-                  {imageUrl ? (
-                    <Image
-                      src={imageUrl}
-                      alt={product.name || "Product image"}
-                      fill
-                      className="object-cover"
-                      unoptimized
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm">
-                      No image available
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {products.map((product, i) => {
+            const slug = product.slug || slugify(product.name || `product-${i}`);
+            const imageUrl = getImageUrl(product.image, product._version);
+
+            return (
+              <Link key={slug} href={`/products/${slug}`} passHref legacyBehavior>
+                <a className="bg-white border border-gray-200 rounded-xl overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-all">
+                  <div className="relative w-full pt-[61.8%] bg-gray-100">
+                    {imageUrl ? (
+                      <Image
+                        src={imageUrl}
+                        alt={product.name || "Product image"}
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm">
+                        No image available
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="p-4 flex flex-col justify-between flex-1">
+                    <div className="mb-2">
+                      <h2 className="font-semibold text-gray-800 text-base truncate">
+                        {product.name || "Unnamed Product"}
+                      </h2>
+                      <p className="text-gray-500 text-sm mt-1 line-clamp-2">
+                        {product.description}
+                      </p>
                     </div>
-                  )}
-                </div>
 
-                <div className="p-4 flex flex-col justify-between flex-1">
-                  <div className="mb-2">
-                    <h2 className="font-semibold text-gray-800 text-base truncate">
-                      {product.name || "Unnamed Product"}
-                    </h2>
-                    <p className="text-gray-500 text-sm mt-1 line-clamp-2">
-                      {product.description}
-                    </p>
+                    <div>
+                      <p className="text-green-600 font-semibold text-sm mb-2">
+                        ${product.price ?? "N/A"}
+                      </p>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleAddToCart(product, i);
+                        }}
+                        className={`w-full text-sm font-medium px-3 py-2 rounded-md text-white transition-colors ${
+                          addedToCartIndex === i
+                            ? "bg-green-600"
+                            : "bg-blue-600 hover:bg-blue-700"
+                        }`}
+                      >
+                        {addedToCartIndex === i ? "✔ Added" : "🛒 Add to Cart"}
+                      </button>
+                    </div>
                   </div>
+                </a>
+              </Link>
+            );
+          })}
+        </div>
 
-                  <div>
-                    <p className="text-green-600 font-semibold text-sm mb-2">
-                      ${product.price ?? "N/A"}
-                    </p>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleAddToCart(product, i);
-                      }}
-                      className={`w-full text-sm font-medium px-3 py-2 rounded-md text-white transition-colors ${
-                        addedToCartIndex === i
-                          ? "bg-green-600"
-                          : "bg-blue-600 hover:bg-blue-700"
-                      }`}
-                    >
-                      {addedToCartIndex === i ? "✔ Added" : "🛒 Add to Cart"}
-                    </button>
-                  </div>
-                </div>
-              </a>
-            </Link>
-          );
-        })}
-      </div>
-
-      {/* ✅ Cart menu below */}
-      <div className="mt-10">
-        <CartMenu />
+        {/* ✅ Cart menu below */}
+        <div className="mt-10">
+          <CartMenu />
+        </div>
       </div>
     </main>
   );
