@@ -5,8 +5,8 @@ import Image from "next/image";
 
 export default function HeroSection() {
   return (
-    <section className="relative w-full min-h-[90vh] flex items-center justify-center overflow-hidden">
-      {/* Background Image */}
+    <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden">
+      {/* ✅ Background Image */}
       <Image
         src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=1600&q=80"
         alt="Hero Background"
@@ -15,10 +15,10 @@ export default function HeroSection() {
         priority
       />
 
-      {/* Overlay */}
+      {/* ✅ Dark Overlay */}
       <div className="absolute inset-0 bg-black/50 z-10" />
 
-      {/* Content */}
+      {/* ✅ Hero Content */}
       <div className="relative z-20 max-w-6xl mx-auto px-6 text-center text-white">
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight mb-4 drop-shadow-md">
           Shop Smarter with <span className="text-blue-400">ShopVerse</span>
