@@ -27,23 +27,31 @@ export default function Navbar({ onSearch, suggestions }: NavbarProps) {
           {/* Navigation Links */}
           <ul className="hidden md:flex gap-8 text-sm font-medium text-gray-700">
             <li>
-              <Link href="/" className="hover:text-blue-600 transition">
-                Home
+              <Link href="/" className="relative pb-1 hover:text-blue-600 transition-colors duration-200">
+                <span className="hover:underline underline-offset-4 decoration-2 decoration-blue-500">
+                  Home
+                </span>
               </Link>
             </li>
             <li>
-              <Link href="/products" className="hover:text-blue-600 transition">
-                Products
+              <Link href="/products" className="relative pb-1 hover:text-blue-600 transition-colors duration-200">
+                <span className="hover:underline underline-offset-4 decoration-2 decoration-blue-500">
+                  Products
+                </span>
               </Link>
             </li>
             <li>
-              <Link href="/about" className="hover:text-blue-600 transition">
-                About
+              <Link href="/about" className="relative pb-1 hover:text-blue-600 transition-colors duration-200">
+                <span className="hover:underline underline-offset-4 decoration-2 decoration-blue-500">
+                  About
+                </span>
               </Link>
             </li>
             <li>
-              <Link href="/contact" className="hover:text-blue-600 transition">
-                Contact
+              <Link href="/contact" className="relative pb-1 hover:text-blue-600 transition-colors duration-200">
+                <span className="hover:underline underline-offset-4 decoration-2 decoration-blue-500">
+                  Contact
+                </span>
               </Link>
             </li>
           </ul>
