@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import CartMenu from "@/app/components/CartMenu";
-import HeroSection from "@/components/HeroSection";
 import Navbar from "@/components/Navbar";
 
 interface MyProduct {
@@ -133,30 +132,54 @@ export default function Page() {
         suggestions={products.map((p) => p.name || "")}
       />
 
-      <HeroSection />
+      {/* 🚀 Updated Hero Section */}
+      <section className="bg-gradient-to-r from-blue-700 to-indigo-800 text-white py-20 px-6">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
+          <div className="md:w-1/2">
+            <h1 className="text-5xl font-bold leading-tight mb-6">
+              Shop Smarter, Dress Better 👕
+            </h1>
+            <p className="text-blue-100 text-lg mb-6 max-w-md">
+              Discover handpicked collections tailored for modern style lovers. Quality meets affordability.
+            </p>
+            <Link href="#products">
+              <button className="bg-white text-blue-700 font-semibold px-6 py-3 rounded-xl hover:bg-blue-100 transition">
+                Browse Products
+              </button>
+            </Link>
+          </div>
 
-      {/* Removed the separate fixed SearchBar here */}
+          <div className="md:w-1/2 hidden md:block">
+            <img
+              src="/hero-product.png" // Add your own image in /public
+              alt="Hero Product"
+              className="w-full max-w-md rounded-xl shadow-2xl"
+            />
+          </div>
+        </div>
+      </section>
 
-      <div className="px-4 py-16 max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-center text-gray-800 mb-12">
+      {/* 💎 Featured Product Grid */}
+      <div id="products" className="px-4 py-20 max-w-7xl mx-auto">
+        <h2 className="text-4xl font-bold text-center text-gray-800 mb-12">
           ✨ Featured Products
-        </h1>
+        </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-10">
           {filteredProducts.map((product, i) => {
             const slug = product.slug || slugify(product.name || `product-${i}`);
             const imageUrl = getImageUrl(product.image, product._version);
 
             return (
               <Link key={slug} href={`/products/${slug}`}>
-                <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition overflow-hidden group border border-gray-100">
+                <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all overflow-hidden border border-gray-200 group">
                   <div className="relative w-full pt-[75%] bg-gray-100">
                     {imageUrl ? (
                       <Image
                         src={imageUrl}
                         alt={product.name || "Product image"}
                         fill
-                        className="object-cover transition duration-300 group-hover:scale-105"
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
                         unoptimized
                       />
                     ) : (
@@ -168,16 +191,16 @@ export default function Page() {
 
                   <div className="p-5 flex flex-col justify-between flex-1">
                     <div>
-                      <h2 className="font-semibold text-gray-900 text-lg mb-1 truncate">
+                      <h3 className="font-semibold text-gray-900 text-lg mb-1 truncate">
                         {product.name || "Unnamed Product"}
-                      </h2>
+                      </h3>
                       <p className="text-gray-500 text-sm line-clamp-2">
                         {product.description}
                       </p>
                     </div>
 
                     <div className="mt-4">
-                      <p className="text-blue-600 font-semibold text-base mb-2">
+                      <p className="text-blue-600 font-bold text-base mb-2">
                         ${product.price ?? "N/A"}
                       </p>
                       <button
@@ -201,7 +224,7 @@ export default function Page() {
           })}
         </div>
 
-        <div className="mt-16">
+        <div className="mt-20">
           <CartMenu />
         </div>
       </div>
