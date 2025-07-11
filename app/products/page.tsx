@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import CartMenu from "@/app/components/CartMenu";
 import HeroSection from "@/components/HeroSection";
-import SearchBar from "@/components/SearchBar";
 import Navbar from "@/components/Navbar";
 
 interface MyProduct {
@@ -129,16 +128,14 @@ export default function Page() {
 
   return (
     <main className="bg-gray-50 min-h-screen font-sans">
-      <Navbar />
+      <Navbar
+        onSearch={setSearchTerm}
+        suggestions={products.map((p) => p.name || "")}
+      />
 
       <HeroSection />
 
-      <div className="fixed top-6 right-6 z-50">
-        <SearchBar
-          onSearch={(val) => setSearchTerm(val)}
-          suggestions={products.map((p) => p.name || "")}
-        />
-      </div>
+      {/* Removed the separate fixed SearchBar here */}
 
       <div className="px-4 py-16 max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold text-center text-gray-800 mb-12">
