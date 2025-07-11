@@ -132,7 +132,7 @@ export default function Page() {
         suggestions={products.map((p) => p.name || "")}
       />
 
-      {/* 🚀 Updated Hero Section */}
+      {/* ✅ HERO SECTION with high-quality hero image */}
       <section className="bg-gradient-to-r from-blue-700 to-indigo-800 text-white py-20 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
           <div className="md:w-1/2">
@@ -151,15 +151,15 @@ export default function Page() {
 
           <div className="md:w-1/2 hidden md:block">
             <img
-              src="/hero-product.png" // Add your own image in /public
-              alt="Hero Product"
+              src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=800&q=80"
+              alt="Fashion Hero"
               className="w-full max-w-md rounded-xl shadow-2xl"
             />
           </div>
         </div>
       </section>
 
-      {/* 💎 Featured Product Grid */}
+      {/* ✅ PRODUCTS GRID */}
       <div id="products" className="px-4 py-20 max-w-7xl mx-auto">
         <h2 className="text-4xl font-bold text-center text-gray-800 mb-12">
           ✨ Featured Products
