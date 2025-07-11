@@ -1,6 +1,6 @@
 "use client";
 
-import { X } from "lucide-react";
+import { X, Mail, Lock, UserPlus } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -16,7 +16,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-50 flex items-center justify-center px-4">
-      <div className="bg-white w-full max-w-xl p-8 rounded-2xl shadow-xl relative animate-fade-in">
+      <div className="bg-white w-full max-w-[42rem] p-10 rounded-3xl shadow-2xl relative animate-fade-in">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -27,8 +27,18 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         </button>
 
         {/* Heading */}
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
-          {authMode === "login" ? "Welcome Back 👋" : "Join MyShop"}
+        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800 flex items-center justify-center gap-2">
+          {authMode === "login" ? (
+            <>
+              <Lock className="w-6 h-6 text-blue-600" />
+              <span>Welcome Back</span>
+            </>
+          ) : (
+            <>
+              <UserPlus className="w-6 h-6 text-blue-600" />
+              <span>Join MyShop</span>
+            </>
+          )}
         </h2>
 
         {/* Form */}
@@ -37,27 +47,33 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Email
             </label>
-            <input
-              type="email"
-              placeholder="you@example.com"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <div className="flex items-center border border-gray-300 rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
+              <Mail className="w-5 h-5 text-gray-400 mr-2" />
+              <input
+                type="email"
+                placeholder="you@example.com"
+                className="w-full bg-transparent focus:outline-none"
+              />
+            </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Password
             </label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <div className="flex items-center border border-gray-300 rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
+              <Lock className="w-5 h-5 text-gray-400 mr-2" />
+              <input
+                type="password"
+                placeholder="••••••••"
+                className="w-full bg-transparent focus:outline-none"
+              />
+            </div>
           </div>
 
           <button
             type="submit"
-            className="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition shadow-sm"
+            className="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition shadow"
           >
             {authMode === "login" ? "Login" : "Register"}
           </button>
@@ -76,7 +92,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         {/* Google Button */}
         <button
           onClick={() => alert("🔐 Google login logic goes here")}
-          className="w-full flex items-center justify-center gap-3 border border-gray-300 py-3 rounded-lg hover:bg-gray-50 transition text-sm"
+          className="w-full flex items-center justify-center gap-3 border border-gray-300 py-3 rounded-lg hover:bg-gray-50 transition text-sm font-medium text-gray-700"
         >
           <Image
             src="https://www.svgrepo.com/show/475656/google-color.svg"
@@ -113,16 +129,16 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         </div>
       </div>
 
-      {/* Animation Keyframes (optional fade-in) */}
+      {/* Fade-in animation */}
       <style jsx>{`
         .animate-fade-in {
-          animation: fadeIn 0.3s ease-out;
+          animation: fadeIn 0.35s ease-out;
         }
 
         @keyframes fadeIn {
           from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(25px);
           }
           to {
             opacity: 1;
