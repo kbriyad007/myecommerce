@@ -7,6 +7,8 @@ import { useCart } from "@/context/CartContext";
 import CartMenu from "@/app/components/CartMenu";
 import HeroSection from "@/components/HeroSection";
 import SearchBar from "@/components/SearchBar"; // ✅ NEW
+import Navbar from "@/components/Navbar";
+
 
 interface MyProduct {
   component: string;
@@ -128,6 +130,7 @@ export default function Page() {
 
   return (
     <main className="bg-white min-h-screen">
+       <Navbar />
       <HeroSection
         searchValue={searchTerm}
         onSearchChange={setSearchTerm}
