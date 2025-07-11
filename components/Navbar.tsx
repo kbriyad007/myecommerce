@@ -17,9 +17,28 @@ export default function Navbar({ onSearch, suggestions }: NavbarProps) {
   return (
     <header className="w-full bg-white border-b shadow-sm sticky top-0 z-50">
       <nav className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-4 flex items-center justify-between">
-        {/* Left: Logo */}
-        <Link href="/" className="text-2xl font-bold text-gray-900">
-          🛍️ MyShop
+        {/* Left: Modern Logo */}
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:opacity-90 transition-opacity duration-300 select-none"
+          aria-label="Go to homepage"
+        >
+          {/* Shopping bag SVG icon */}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-9 h-9"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M5 8h14l-1.5 9h-11L5 8zM7 8V6a5 5 0 0110 0v2"
+            />
+          </svg>
+          <span>MyShop</span>
         </Link>
 
         {/* Right: Menu + Search + Cart */}
