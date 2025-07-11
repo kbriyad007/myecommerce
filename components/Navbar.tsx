@@ -1,8 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
-import { ShoppingCart, Search } from "lucide-react";
+import { ShoppingCart, Search, Menu, X } from "lucide-react";
 import SearchBar from "./SearchBar";
 
 interface NavbarProps {
@@ -12,21 +13,20 @@ interface NavbarProps {
 
 export default function Navbar({ onSearch, suggestions }: NavbarProps) {
   const { cart } = useCart();
+  const [menuOpen, setMenuOpen] = useState(false);
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <header className="w-full bg-white border-b shadow-sm sticky top-0 z-50">
-      <nav className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-4 flex items-center justify-between">
-        {/* Left: Modern Logo */}
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+        {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2 text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:opacity-90 transition-opacity duration-300 select-none"
-          aria-label="Go to homepage"
+          className="flex items-center gap-2 text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:opacity-90 transition-opacity duration-300"
         >
-          {/* Shopping bag SVG icon */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="w-9 h-9"
+            className="w-8 h-8"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -41,51 +41,37 @@ export default function Navbar({ onSearch, suggestions }: NavbarProps) {
           <span>MyShop</span>
         </Link>
 
-        {/* Right: Menu + Search + Cart */}
-        <div className="flex items-center space-x-8">
-          {/* Navigation Links */}
-          <ul className="hidden md:flex gap-8 text-sm font-medium text-gray-700">
-            <li>
-              <Link href="/" className="relative pb-1 hover:text-blue-600 transition-colors duration-200">
-                <span className="hover:underline underline-offset-4 decoration-2 decoration-blue-500">
-                  Home
-                </span>
-              </Link>
-            </li>
-            <li>
-              <Link href="/products" className="relative pb-1 hover:text-blue-600 transition-colors duration-200">
-                <span className="hover:underline underline-offset-4 decoration-2 decoration-blue-500">
-                  Products
-                </span>
-              </Link>
-            </li>
-            <li>
-              <Link href="/about" className="relative pb-1 hover:text-blue-600 transition-colors duration-200">
-                <span className="hover:underline underline-offset-4 decoration-2 decoration-blue-500">
-                  About
-                </span>
-              </Link>
-            </li>
-            <li>
-              <Link href="/contact" className="relative pb-1 hover:text-blue-600 transition-colors duration-200">
-                <span className="hover:underline underline-offset-4 decoration-2 decoration-blue-500">
-                  Contact
-                </span>
-              </Link>
-            </li>
+        {/* Desktop Menu */}
+        <div className="hidden md:flex items-center space-x-8">
+          <ul className="flex gap-6 text-sm font-medium text-gray-700 items-center">
+            {["Home", "Products", "About", "Contact"].map((item) => (
+              <li key={item}>
+                <Link
+                  href={`/${item.toLowerCase() === "home" ? "" : item.toLowerCase()}`}
+                  className="hover:text-blue-600 transition-colors"
+                >
+                  <span className="hover:underline underline-offset-4 decoration-2 decoration-blue-500">
+                    {item}
+                  </span>
+                </Link>
+              </li>
+            ))}
           </ul>
 
-          {/* Search bar with separate icon */}
+          {/* Search */}
           <div className="relative flex items-center w-64">
             <Search className="w-5 h-5 text-gray-400 mr-3" />
             <SearchBar onSearch={onSearch} suggestions={suggestions} />
           </div>
+        </div>
 
+        {/* Cart + Hamburger */}
+        <div className="flex items-center space-x-4 md:space-x-6">
           {/* Cart Icon */}
           <Link
             href="/checkout"
-            className="relative flex items-center hover:text-blue-600 transition"
-            aria-label="View Cart"
+            className="relative hover:text-blue-600 transition"
+            aria-label="Cart"
           >
             <ShoppingCart className="w-6 h-6 text-gray-700" />
             {totalItems > 0 && (
@@ -94,8 +80,42 @@ export default function Navbar({ onSearch, suggestions }: NavbarProps) {
               </span>
             )}
           </Link>
+
+          {/* Hamburger Icon */}
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="md:hidden text-gray-700 hover:text-blue-600 transition"
+            aria-label="Toggle Menu"
+          >
+            {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
       </nav>
+
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="md:hidden border-t px-4 pb-4 pt-2 bg-white shadow-sm">
+          <ul className="flex flex-col gap-3 text-sm font-medium text-gray-700">
+            {["Home", "Products", "About", "Contact"].map((item) => (
+              <li key={item}>
+                <Link
+                  href={`/${item.toLowerCase() === "home" ? "" : item.toLowerCase()}`}
+                  className="block hover:text-blue-600 transition-colors"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {item}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          {/* Mobile Search */}
+          <div className="mt-4 flex items-center border rounded-lg px-3 py-2 bg-gray-100">
+            <Search className="w-5 h-5 text-gray-400 mr-2" />
+            <SearchBar onSearch={onSearch} suggestions={suggestions} />
+          </div>
+        </div>
+      )}
     </header>
   );
 }
