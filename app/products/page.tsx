@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -18,13 +17,11 @@ interface MyProduct {
   slug?: string;
   _version?: number;
 }
-
 interface StoryblokStory {
   slug: string;
   content: MyProduct;
   _version?: number;
 }
-
 function slugify(text: string): string {
   return text
     .toLowerCase()
@@ -34,7 +31,6 @@ function slugify(text: string): string {
     .replace(/^-+/, "")
     .replace(/-+$/, "");
 }
-
 export default function Page() {
   const [products, setProducts] = useState<MyProduct[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<MyProduct[]>([]);
@@ -42,7 +38,6 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
   const [addedToCartIndex, setAddedToCartIndex] = useState<number | null>(null);
-
   const { addToCart } = useCart();
 
   useEffect(() => {
@@ -52,9 +47,7 @@ export default function Page() {
       setLoading(false);
       return;
     }
-
     const url = `https://api.storyblok.com/v2/cdn/stories?starts_with=product&version=draft&token=${token}`;
-
     fetch(url)
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
@@ -90,18 +83,15 @@ export default function Page() {
       typeof product.Price === "string"
         ? parseFloat(product.Price)
         : product.Price;
-
     if (price === undefined || isNaN(price)) {
       alert("Invalid price");
       return;
     }
-
     addToCart({
       name: product.name || "Unnamed Product",
       price,
       quantity: 1,
     });
-
     setAddedToCartIndex(index);
     setTimeout(() => setAddedToCartIndex(null), 1500);
   };
@@ -132,21 +122,17 @@ export default function Page() {
         onSearch={setSearchTerm}
         suggestions={products.map((p) => p.name || "")}
       />
-
       <HeroSection />
-
-      {/* Removed the separate fixed SearchBar here */}
 
       <div className="px-4 py-16 max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold text-center text-gray-800 mb-12">
           ✨ Featured Products
         </h1>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           {filteredProducts.map((product, i) => {
             const slug = product.slug || slugify(product.name || `product-${i}`);
             const imageUrl = getImageUrl(product.image, product._version);
-
             return (
               <Link key={slug} href={`/products/${slug}`}>
                 <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition overflow-hidden group border border-gray-100">
@@ -165,7 +151,6 @@ export default function Page() {
                       </div>
                     )}
                   </div>
-
                   <div className="p-5 flex flex-col justify-between flex-1">
                     <div>
                       <h2 className="font-semibold text-gray-900 text-lg mb-1 truncate">
@@ -175,7 +160,6 @@ export default function Page() {
                         {product.description}
                       </p>
                     </div>
-
                     <div className="mt-4">
                       <p className="text-blue-600 font-semibold text-base mb-2">
                         ${product.price ?? "N/A"}
