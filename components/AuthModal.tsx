@@ -15,8 +15,8 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-50 flex items-center justify-center px-4">
-      <div className="bg-white w-full max-w-[42rem] p-10 rounded-3xl shadow-2xl relative animate-fade-in">
+    <div className="fixed inset-0 z-50 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center px-4">
+      <div className="w-full max-w-md md:max-w-lg lg:max-w-xl h-[38rem] bg-white rounded-3xl shadow-2xl relative p-10 animate-fade-in flex flex-col justify-center">
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -36,7 +36,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           ) : (
             <>
               <UserPlus className="w-6 h-6 text-blue-600" />
-              <span>Join MyShop</span>
+              <span>Create Your Account</span>
             </>
           )}
         </h2>
@@ -85,11 +85,11 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             <div className="w-full border-t border-gray-200" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="bg-white px-2 text-gray-400">or continue with</span>
+            <span className="bg-white px-2 text-gray-400">or</span>
           </div>
         </div>
 
-        {/* Google Button */}
+        {/* Google Login */}
         <button
           onClick={() => alert("🔐 Google login logic goes here")}
           className="w-full flex items-center justify-center gap-3 border border-gray-300 py-3 rounded-lg hover:bg-gray-50 transition text-sm font-medium text-gray-700"
@@ -103,7 +103,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           <span>Continue with Google</span>
         </button>
 
-        {/* Switch Mode */}
+        {/* Auth Mode Toggle */}
         <div className="mt-6 text-center text-sm text-gray-600">
           {authMode === "login" ? (
             <>
@@ -138,7 +138,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         @keyframes fadeIn {
           from {
             opacity: 0;
-            transform: translateY(25px);
+            transform: translateY(20px);
           }
           to {
             opacity: 1;
