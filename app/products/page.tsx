@@ -132,30 +132,26 @@ export default function Page() {
         suggestions={products.map((p) => p.name || "")}
       />
 
-      {/* ✅ HERO SECTION with high-quality hero image */}
-      <section className="bg-gradient-to-r from-blue-700 to-indigo-800 text-white py-20 px-6">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
-          <div className="md:w-1/2">
-            <h1 className="text-5xl font-bold leading-tight mb-6">
-              Shop Smarter, Dress Better 👕
-            </h1>
-            <p className="text-blue-100 text-lg mb-6 max-w-md">
-              Discover handpicked collections tailored for modern style lovers. Quality meets affordability.
-            </p>
-            <Link href="#products">
-              <button className="bg-white text-blue-700 font-semibold px-6 py-3 rounded-xl hover:bg-blue-100 transition">
-                Browse Products
-              </button>
-            </Link>
-          </div>
-
-          <div className="md:w-1/2 hidden md:block">
-            <img
-              src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=800&q=80"
-              alt="Fashion Hero"
-              className="w-full max-w-md rounded-xl shadow-2xl"
-            />
-          </div>
+      {/* ✅ Fullscreen Hero with Background Image */}
+      <section
+        className="relative h-screen w-full bg-cover bg-center"
+        style={{
+          backgroundImage: `url('https://source.unsplash.com/1920x1080/?fashion,model')`,
+        }}
+      >
+        <div className="absolute inset-0 bg-black bg-opacity-50" />
+        <div className="relative z-10 flex flex-col justify-center items-center h-full text-white px-6 text-center">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg">
+            Upgrade Your Wardrobe Today
+          </h1>
+          <p className="text-lg md:text-xl text-blue-100 max-w-xl mb-8">
+            Discover trending styles with comfort, quality, and confidence. Your next outfit awaits.
+          </p>
+          <Link href="#products">
+            <button className="bg-white text-blue-700 font-semibold px-6 py-3 rounded-xl hover:bg-blue-100 transition">
+              🛍️ Shop Now
+            </button>
+          </Link>
         </div>
       </section>
 
@@ -188,7 +184,6 @@ export default function Page() {
                       </div>
                     )}
                   </div>
-
                   <div className="p-5 flex flex-col justify-between flex-1">
                     <div>
                       <h3 className="font-semibold text-gray-900 text-lg mb-1 truncate">
@@ -198,7 +193,6 @@ export default function Page() {
                         {product.description}
                       </p>
                     </div>
-
                     <div className="mt-4">
                       <p className="text-blue-600 font-bold text-base mb-2">
                         ${product.price ?? "N/A"}
