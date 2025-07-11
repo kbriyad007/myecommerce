@@ -13,109 +13,209 @@ interface NavbarProps {
 
 export default function Navbar({ onSearch, suggestions }: NavbarProps) {
   const { cart } = useCart();
-  const [menuOpen, setMenuOpen] = useState(false);
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-  return (
-    <header className="w-full bg-white border-b shadow-sm sticky top-0 z-50">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-        {/* Logo */}
-        <Link
-          href="/"
-          className="flex items-center gap-2 text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:opacity-90 transition-opacity duration-300"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-8 h-8"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M5 8h14l-1.5 9h-11L5 8zM7 8V6a5 5 0 0110 0v2"
-            />
-          </svg>
-          <span>MyShop</span>
-        </Link>
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authMode, setAuthMode] = useState<"login" | "register">("login");
 
-        {/* Desktop Menu */}
-        <div className="hidden md:flex items-center space-x-8">
-          <ul className="flex gap-6 text-sm font-medium text-gray-700 items-center">
-            {["Home", "Products", "About", "Contact"].map((item) => (
-              <li key={item}>
-                <Link
-                  href={`/${item.toLowerCase() === "home" ? "" : item.toLowerCase()}`}
+  return (
+    <>
+      <header className="w-full bg-white border-b shadow-sm sticky top-0 z-50">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+          {/* Logo */}
+          <Link
+            href="/"
+            className="flex items-center gap-2 text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:opacity-90 transition-opacity duration-300"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-8 h-8"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5 8h14l-1.5 9h-11L5 8zM7 8V6a5 5 0 0110 0v2"
+              />
+            </svg>
+            <span>MyShop</span>
+          </Link>
+
+          {/* Desktop Menu */}
+          <div className="hidden md:flex items-center space-x-8">
+            <ul className="flex gap-6 text-sm font-medium text-gray-700 items-center">
+              {["Home", "Products", "About", "Contact"].map((item) => (
+                <li key={item}>
+                  <Link
+                    href={`/${item.toLowerCase() === "home" ? "" : item.toLowerCase()}`}
+                    className="hover:text-blue-600 transition-colors"
+                  >
+                    <span className="hover:underline underline-offset-4 decoration-2 decoration-blue-500">
+                      {item}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <button
+                  onClick={() => setShowAuthModal(true)}
                   className="hover:text-blue-600 transition-colors"
                 >
                   <span className="hover:underline underline-offset-4 decoration-2 decoration-blue-500">
-                    {item}
+                    Login
                   </span>
-                </Link>
+                </button>
               </li>
-            ))}
-          </ul>
+            </ul>
 
-          {/* Search */}
-          <div className="relative flex items-center w-64">
-            <Search className="w-5 h-5 text-gray-400 mr-3" />
-            <SearchBar onSearch={onSearch} suggestions={suggestions} />
+            {/* Search */}
+            <div className="relative flex items-center w-64">
+              <Search className="w-5 h-5 text-gray-400 mr-3" />
+              <SearchBar onSearch={onSearch} suggestions={suggestions} />
+            </div>
           </div>
-        </div>
 
-        {/* Cart + Hamburger */}
-        <div className="flex items-center space-x-4 md:space-x-6">
-          {/* Cart Icon */}
-          <Link
-            href="/checkout"
-            className="relative hover:text-blue-600 transition"
-            aria-label="Cart"
-          >
-            <ShoppingCart className="w-6 h-6 text-gray-700" />
-            {totalItems > 0 && (
-              <span className="absolute -top-2 -right-3 bg-blue-600 text-white text-xs rounded-full px-1.5 font-semibold select-none">
-                {totalItems}
-              </span>
-            )}
-          </Link>
+          {/* Cart + Hamburger */}
+          <div className="flex items-center space-x-4 md:space-x-6">
+            <Link
+              href="/checkout"
+              className="relative hover:text-blue-600 transition"
+              aria-label="Cart"
+            >
+              <ShoppingCart className="w-6 h-6 text-gray-700" />
+              {totalItems > 0 && (
+                <span className="absolute -top-2 -right-3 bg-blue-600 text-white text-xs rounded-full px-1.5 font-semibold select-none">
+                  {totalItems}
+                </span>
+              )}
+            </Link>
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="md:hidden text-gray-700 hover:text-blue-600 transition"
+              aria-label="Toggle Menu"
+            >
+              {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
+        </nav>
 
-          {/* Hamburger Icon */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden text-gray-700 hover:text-blue-600 transition"
-            aria-label="Toggle Menu"
-          >
-            {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <div className="md:hidden border-t px-4 pb-4 pt-2 bg-white shadow-sm">
-          <ul className="flex flex-col gap-3 text-sm font-medium text-gray-700">
-            {["Home", "Products", "About", "Contact"].map((item) => (
-              <li key={item}>
-                <Link
-                  href={`/${item.toLowerCase() === "home" ? "" : item.toLowerCase()}`}
-                  className="block hover:text-blue-600 transition-colors"
-                  onClick={() => setMenuOpen(false)}
+        {/* Mobile Menu */}
+        {menuOpen && (
+          <div className="md:hidden border-t px-4 pb-4 pt-2 bg-white shadow-sm">
+            <ul className="flex flex-col gap-3 text-sm font-medium text-gray-700">
+              {["Home", "Products", "About", "Contact"].map((item) => (
+                <li key={item}>
+                  <Link
+                    href={`/${item.toLowerCase() === "home" ? "" : item.toLowerCase()}`}
+                    className="block hover:text-blue-600 transition-colors"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {item}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <button
+                  onClick={() => {
+                    setMenuOpen(false);
+                    setShowAuthModal(true);
+                  }}
+                  className="text-left w-full hover:text-blue-600 transition"
                 >
-                  {item}
-                </Link>
+                  Login
+                </button>
               </li>
-            ))}
-          </ul>
+            </ul>
+            <div className="mt-4 flex items-center border rounded-lg px-3 py-2 bg-gray-100">
+              <Search className="w-5 h-5 text-gray-400 mr-2" />
+              <SearchBar onSearch={onSearch} suggestions={suggestions} />
+            </div>
+          </div>
+        )}
+      </header>
 
-          {/* Mobile Search */}
-          <div className="mt-4 flex items-center border rounded-lg px-3 py-2 bg-gray-100">
-            <Search className="w-5 h-5 text-gray-400 mr-2" />
-            <SearchBar onSearch={onSearch} suggestions={suggestions} />
+      {/* ✅ Login / Register Modal */}
+      {showAuthModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
+          <div className="bg-white w-full max-w-md p-6 rounded-xl shadow-lg relative">
+            <button
+              onClick={() => setShowAuthModal(false)}
+              className="absolute top-3 right-4 text-gray-400 hover:text-gray-600"
+              aria-label="Close"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <h2 className="text-2xl font-bold mb-4 text-center">
+              {authMode === "login" ? "Login to Your Account" : "Create an Account"}
+            </h2>
+
+            <form className="space-y-4">
+              <input
+                type="email"
+                placeholder="Email"
+                className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-blue-500"
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-blue-500"
+              />
+
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+              >
+                {authMode === "login" ? "Login" : "Register"}
+              </button>
+            </form>
+
+            <div className="text-center text-sm text-gray-500 mt-4">
+              or continue with
+            </div>
+
+            <button
+              onClick={() => alert("🔐 Google login logic goes here")}
+              className="w-full mt-3 flex items-center justify-center gap-2 border py-2 rounded-md hover:bg-gray-50"
+            >
+              <img
+                src="https://www.svgrepo.com/show/475656/google-color.svg"
+                alt="Google"
+                className="w-5 h-5"
+              />
+              <span>Continue with Google</span>
+            </button>
+
+            <div className="mt-4 text-sm text-center text-gray-600">
+              {authMode === "login" ? (
+                <>
+                  Don't have an account?{" "}
+                  <button
+                    onClick={() => setAuthMode("register")}
+                    className="text-blue-600 font-medium hover:underline"
+                  >
+                    Register now
+                  </button>
+                </>
+              ) : (
+                <>
+                  Already have an account?{" "}
+                  <button
+                    onClick={() => setAuthMode("login")}
+                    className="text-blue-600 font-medium hover:underline"
+                  >
+                    Login here
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 }
