@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Search } from "lucide-react";
 import SearchBar from "./SearchBar";
 
 interface NavbarProps {
@@ -17,70 +17,57 @@ export default function Navbar({ onSearch, suggestions }: NavbarProps) {
   return (
     <header className="w-full bg-white border-b shadow-sm sticky top-0 z-50">
       <nav className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-4 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="text-2xl font-extrabold text-gray-900 select-none">
+        {/* Left: Logo */}
+        <Link href="/" className="text-2xl font-bold text-gray-900">
           🛍️ MyShop
         </Link>
 
-        {/* Navigation Links + Search (desktop only) */}
-        <div className="hidden md:flex items-center gap-8 flex-1 mx-8">
-          {/* Nav Links */}
-          <ul className="flex gap-8 text-gray-700 font-medium text-sm tracking-wide">
+        {/* Right: Menu + Search + Cart */}
+        <div className="flex items-center space-x-8">
+          {/* Navigation Links */}
+          <ul className="hidden md:flex gap-8 text-sm font-medium text-gray-700">
             <li>
-              <Link
-                href="/"
-                className="hover:text-blue-600 transition duration-200"
-              >
+              <Link href="/" className="hover:text-blue-600 transition">
                 Home
               </Link>
             </li>
             <li>
-              <Link
-                href="/products"
-                className="hover:text-blue-600 transition duration-200"
-              >
+              <Link href="/products" className="hover:text-blue-600 transition">
                 Products
               </Link>
             </li>
             <li>
-              <Link
-                href="/about"
-                className="hover:text-blue-600 transition duration-200"
-              >
+              <Link href="/about" className="hover:text-blue-600 transition">
                 About
               </Link>
             </li>
             <li>
-              <Link
-                href="/contact"
-                className="hover:text-blue-600 transition duration-200"
-              >
+              <Link href="/contact" className="hover:text-blue-600 transition">
                 Contact
               </Link>
             </li>
           </ul>
 
-          {/* Search Bar */}
-          <div className="ml-auto w-48 min-w-[180px]">
+          {/* Search bar with separate icon */}
+          <div className="relative flex items-center w-64">
+            <Search className="w-5 h-5 text-gray-400 mr-3" />
             <SearchBar onSearch={onSearch} suggestions={suggestions} />
           </div>
+
+          {/* Cart Icon */}
+          <Link
+            href="/checkout"
+            className="relative flex items-center hover:text-blue-600 transition"
+            aria-label="View Cart"
+          >
+            <ShoppingCart className="w-6 h-6 text-gray-700" />
+            {totalItems > 0 && (
+              <span className="absolute -top-2 -right-3 bg-blue-600 text-white text-xs rounded-full px-1.5 font-semibold select-none">
+                {totalItems}
+              </span>
+            )}
+          </Link>
         </div>
-
-        {/* Cart Icon */}
-        <Link
-          href="/checkout"
-          className="relative hover:text-blue-600 transition duration-200 ml-4"
-          aria-label="Go to checkout"
-        >
-          <ShoppingCart className="w-6 h-6 text-gray-700" />
-          {totalItems > 0 && (
-            <span className="absolute -top-2 -right-3 bg-blue-600 text-white text-xs rounded-full px-1.5 font-semibold select-none">
-              {totalItems}
-            </span>
-          )}
-        </Link>
-
-        {/* TODO: Hamburger menu button for mobile */}
       </nav>
     </header>
   );
