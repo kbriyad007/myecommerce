@@ -131,10 +131,10 @@ export default function Page() {
     <main className="bg-white min-h-screen">
       <Navbar />
 
-      {/* Pass empty props here to fix build error */}
-      <HeroSection searchValue="" onSearchChange={() => {}} />
+      {/* ✅ Only using Hero visual, not search props */}
+      <HeroSection />
 
-      {/* Fixed Search Bar */}
+      {/* ✅ Fixed search bar at top-right */}
       <div className="fixed top-6 right-6 z-50">
         <SearchBar
           onSearch={(val) => setSearchTerm(val)}
