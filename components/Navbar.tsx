@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useCart } from "@/context/CartContext";
 import { ShoppingCart, Search, Menu, X } from "lucide-react";
 import SearchBar from "./SearchBar";
@@ -138,7 +139,7 @@ export default function Navbar({ onSearch, suggestions }: NavbarProps) {
         )}
       </header>
 
-      {/* ✅ Login / Register Modal */}
+      {/* ✅ Auth Modal */}
       {showAuthModal && (
         <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
           <div className="bg-white w-full max-w-md p-6 rounded-xl shadow-lg relative">
@@ -165,7 +166,6 @@ export default function Navbar({ onSearch, suggestions }: NavbarProps) {
                 placeholder="Password"
                 className="w-full px-4 py-2 border rounded-md focus:ring focus:ring-blue-500"
               />
-
               <button
                 type="submit"
                 className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
@@ -182,10 +182,11 @@ export default function Navbar({ onSearch, suggestions }: NavbarProps) {
               onClick={() => alert("🔐 Google login logic goes here")}
               className="w-full mt-3 flex items-center justify-center gap-2 border py-2 rounded-md hover:bg-gray-50"
             >
-              <img
+              <Image
                 src="https://www.svgrepo.com/show/475656/google-color.svg"
                 alt="Google"
-                className="w-5 h-5"
+                width={20}
+                height={20}
               />
               <span>Continue with Google</span>
             </button>
@@ -193,7 +194,7 @@ export default function Navbar({ onSearch, suggestions }: NavbarProps) {
             <div className="mt-4 text-sm text-center text-gray-600">
               {authMode === "login" ? (
                 <>
-                  Don't have an account?{" "}
+                  Don&apos;t have an account?{" "}
                   <button
                     onClick={() => setAuthMode("register")}
                     className="text-blue-600 font-medium hover:underline"
