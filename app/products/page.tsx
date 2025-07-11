@@ -5,7 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import CartMenu from "@/app/components/CartMenu";
-import HeroSection from "@/components/HeroSection"; // ✅ uses props now
+import HeroSection from "@/components/HeroSection";
+import SearchBar from "@/components/SearchBar"; // ✅ NEW
 
 interface MyProduct {
   component: string;
@@ -127,11 +128,15 @@ export default function Page() {
 
   return (
     <main className="bg-white min-h-screen">
-      {/* ✅ Pass search props to HeroSection */}
-      <HeroSection
-        searchValue={searchTerm}
-        onSearchChange={setSearchTerm}
-      />
+      <HeroSection />
+
+      {/* ✅ Fixed search bar */}
+      <div className="fixed top-6 right-6 z-50">
+        <SearchBar
+          onSearch={(val) => setSearchTerm(val)}
+          suggestions={products.map((p) => p.name || "")}
+        />
+      </div>
 
       <div className="px-4 py-12">
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
