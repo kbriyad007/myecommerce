@@ -6,22 +6,37 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setMessage("");
+    setLoading(true);
+    console.log("Register button clicked", { email, password });
 
-    const res = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const data = await res.json();
-    if (res.ok) {
-      setMessage("Registration successful!");
-    } else {
-      setMessage(data.error || "Something went wrong.");
+      const data = await res.json();
+      if (res.ok) {
+        setMessage("Registration successful!");
+        console.log("Registration success:", data);
+        // Optionally clear inputs after success
+        setEmail("");
+        setPassword("");
+      } else {
+        setMessage(data.error || "Something went wrong.");
+        console.warn("Registration error:", data);
+      }
+    } catch (error) {
+      console.error("Fetch error:", error);
+      setMessage("Network error. Please try again.");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -36,6 +51,7 @@ export default function RegisterPage() {
           onChange={e => setEmail(e.target.value)}
           required
           className="border p-2 rounded"
+          disabled={loading}
         />
         <input
           type="password"
@@ -44,12 +60,14 @@ export default function RegisterPage() {
           onChange={e => setPassword(e.target.value)}
           required
           className="border p-2 rounded"
+          disabled={loading}
         />
         <button
           type="submit"
-          className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+          className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={loading}
         >
-          Register
+          {loading ? "Registering..." : "Register"}
         </button>
       </form>
       {message && <p className="mt-4 text-center">{message}</p>}
