@@ -119,33 +119,48 @@ export default function Page() {
 
       <style jsx>{`
         .product-grid {
-          min-height: 100vh;
-          padding: 3rem 1.5rem;
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1rem;
+          padding: 1.5rem;
           background-color: #f3f4f6;
           font-family: "Inter", sans-serif;
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-          gap: 1.6rem;
           max-width: 1400px;
           margin: 0 auto;
         }
 
+        @media (min-width: 768px) {
+          .product-grid {
+            grid-template-columns: repeat(3, 1fr);
+          }
+        }
+
+        @media (min-width: 1024px) {
+          .product-grid {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.2rem;
+          }
+        }
+
         .card {
           background-color: #ffffff;
+          border-radius: 10px;
+          overflow: hidden;
           border: 1px solid #e5e7eb;
-          border-radius: 12px;
-          box-shadow: 0 0 0 rgba(0, 0, 0, 0); /* No shadow on hover */
           display: flex;
           flex-direction: column;
-          overflow: hidden;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+          transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+          transform: translateY(-2px);
         }
 
         .image-wrapper {
           position: relative;
           width: 100%;
           aspect-ratio: 4 / 3;
-          overflow: hidden;
-          border-bottom: 1px solid #e5e7eb;
         }
 
         .product-img {
@@ -153,31 +168,27 @@ export default function Page() {
         }
 
         .card-body {
-          padding: 1.2rem;
+          padding: 1rem;
           display: flex;
           flex-direction: column;
-          flex-grow: 1;
-          border-top: none;
+          gap: 0.5rem;
         }
 
         .card-title {
-          font-weight: 600;
           font-size: 1rem;
+          font-weight: 600;
           color: #1f2937;
-          margin-bottom: 0.5rem;
         }
 
         .card-description {
           font-size: 0.85rem;
           color: #6b7280;
-          margin-bottom: 1rem;
           flex-grow: 1;
         }
 
         .card-price {
           font-size: 0.9rem;
           color: #4b5563;
-          margin-bottom: 1rem;
         }
 
         .card-price span {
@@ -186,14 +197,14 @@ export default function Page() {
         }
 
         .btn-add-cart {
-          padding: 0.6rem;
           background-color: #1f2937;
-          color: #ffffff;
+          color: white;
+          padding: 0.5rem;
+          border-radius: 6px;
           font-size: 0.85rem;
-          font-weight: 600;
+          font-weight: 500;
           border: none;
-          border-radius: 8px;
-          transition: background-color 0.2s ease;
+          cursor: pointer;
         }
 
         .btn-add-cart:hover {
@@ -205,24 +216,9 @@ export default function Page() {
         }
 
         .added-msg {
-          margin-top: 0.5rem;
           font-size: 0.8rem;
-          font-weight: 500;
           color: #16a34a;
           text-align: center;
-        }
-
-        @media (min-width: 1024px) {
-          .product-grid {
-            grid-template-columns: repeat(4, 1fr);
-          }
-        }
-
-        @media (max-width: 480px) {
-          .product-grid {
-            grid-template-columns: repeat(2, 1fr);
-            padding: 1.5rem 1rem;
-          }
         }
       `}</style>
     </>
