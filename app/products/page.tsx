@@ -135,7 +135,7 @@ export default function Page() {
             const imageUrl = getImageUrl(product.image, product._version);
             return (
               <Link key={slug} href={`/products/${slug}`}>
-                <div className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition overflow-hidden group border border-gray-100">
+                <div className="bg-white rounded-md shadow-lg hover:shadow-xl transition overflow-hidden group border border-gray-100">
                   <div className="relative w-full pt-[75%] bg-gray-100">
                     {imageUrl ? (
                       <Image
