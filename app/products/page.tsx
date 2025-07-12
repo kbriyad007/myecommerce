@@ -129,7 +129,7 @@ export default function Page() {
           ✨ Featured Products
         </h1>
 
-       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {filteredProducts.map((product, i) => {
             const slug = product.slug || slugify(product.name || `product-${i}`);
             const imageUrl = getImageUrl(product.image, product._version);
