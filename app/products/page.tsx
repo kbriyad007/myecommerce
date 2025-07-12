@@ -151,7 +151,7 @@ export default function Page() {
                       </div>
                     )}
                   </div>
-                  <div className="p-5 flex flex-col justify-between flex-1">
+                 <div className="p-1 lg:p-5 flex flex-col justify-between flex-1">
                     <div>
                       <h2 className="font-semibold text-gray-900 text-lg mb-1 truncate">
                         {product.name || "Unnamed Product"}
